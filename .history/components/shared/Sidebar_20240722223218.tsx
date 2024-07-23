@@ -27,14 +27,14 @@ export function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-10 flex h-full w-64 flex-col bg-background border-r border-muted">
       <div className="flex h-16 shrink-0 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold" prefetch={false}>
-        <MountainIcon className="h-6 w-6" />
-          <span className="sr-only">Nyme.AI</span>
+        <Link href="#" className="flex items-center gap-2 font-semibold" prefetch={false}>
+          <MountainIcon className="h-6 w-6" />
+          <span className="sr-only">Acme Inc</span>
         </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
-              <Image src="output.svg" width="50" height="32" stroke="transparent" className="rounded-full" alt="image" />
+              <Image src="output.svg" width="32" height="32" className="rounded-full" alt="logo" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

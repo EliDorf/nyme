@@ -34,7 +34,8 @@ export function Sidebar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
-              <Image src="output.svg" width="50" height="32" stroke="transparent" className="rounded-full" alt="image" />
+            <MountainIcon className="h-6 w-6" />
+              <Image src="output.svg" width="32" height="32" className="rounded-full" alt="image" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
