@@ -79,7 +79,7 @@ export function Sidebar() {
   )
 }
 
-function AwardIcon(props: React.SVGProps<SVGSVGElement>) {
+function AwardIcon(props) {
   return (
     <svg
       {...props}
@@ -100,7 +100,7 @@ function AwardIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function HomeIcon(props: React.SVGProps<SVGSVGElement>){
+function HomeIcon(props) {
   return (
     <svg
       {...props}
@@ -121,7 +121,7 @@ function HomeIcon(props: React.SVGProps<SVGSVGElement>){
 }
 
 
-function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
+function MountainIcon(props) {
   return (
     <svg
       {...props}
@@ -141,7 +141,7 @@ function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function UserIcon(props: React.SVGProps<SVGSVGElement>) {
+function UserIcon(props) {
   return (
     <svg
       {...props}
@@ -162,7 +162,7 @@ function UserIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function XIcon(props: React.SVGProps<SVGSVGElement>) {
+function XIcon(props) {
   return (
     <svg
       {...props}

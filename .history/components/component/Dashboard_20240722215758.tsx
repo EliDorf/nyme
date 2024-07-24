@@ -21,7 +21,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import React from "react"
 
 export function Dashboard() {
   return (
@@ -204,7 +203,7 @@ export function Dashboard() {
   )
 }
 
-function DoorClosedIcon(props: React.SVGProps<SVGSVGElement>) {
+function DoorClosedIcon(props) {
   return (
     <svg
       {...props}
@@ -226,7 +225,7 @@ function DoorClosedIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function GlobeIcon(props: React.SVGProps<SVGSVGElement>) {
+function GlobeIcon(props) {
   return (
     <svg
       {...props}
@@ -248,7 +247,7 @@ function GlobeIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function SparkleIcon(props: React.SVGProps<SVGSVGElement>) {
+function SparkleIcon(props) {
   return (
     <svg
       {...props}
@@ -268,7 +267,7 @@ function SparkleIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function XIcon(props: React.SVGProps<SVGSVGElement>) {
+function XIcon(props) {
   return (
     <svg
       {...props}

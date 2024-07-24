@@ -162,7 +162,7 @@ function UserIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 
-function XIcon(props: React.SVGProps<SVGSVGElement>) {
+function XIcon(props) {
   return (
     <svg
       {...props}
