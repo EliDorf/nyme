@@ -1,6 +1,7 @@
 import { Dashboard } from '@/components/component/Dashboard';
 import { Sidebar } from '@/components/shared/Sidebar';
 import React from 'react';
+import { MobileNav } from '@/components/shared/mobile-nav';
 import { NewSidebar } from '@/components/shared/new-sidebar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {

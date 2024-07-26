@@ -1,12 +1,13 @@
 import { Dashboard } from '@/components/component/Dashboard';
 import { Sidebar } from '@/components/shared/Sidebar';
 import React from 'react';
-import { NewSidebar } from '@/components/shared/new-sidebar';
+import Mobilenav from '@/components/shared/Mobilenav';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="root">
-      <NewSidebar />
+      <Sidebar />
+      <Mobilenav />
         <div className='root-container'>
             <div className='wrapper'>
               <Dashboard/>
