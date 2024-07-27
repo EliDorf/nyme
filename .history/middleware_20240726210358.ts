@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 // Define your public routes
@@ -7,10 +6,10 @@ const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', '/api/
 export default clerkMiddleware((auth, request) => {
   if (isPublicRoute(request)) {
     // If the request matches a public route, allow it to pass without authentication
-    return NextResponse.next();
+    return request;
   } else {
     // If the request does not match a public route, enforce authentication
-    return auth().protect()(request, NextResponse);
+    return auth().protect()(request);
   }
 });
 
