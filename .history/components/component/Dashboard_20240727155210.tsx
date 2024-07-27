@@ -33,6 +33,7 @@ export function Dashboard() {
         headers: {
           'Content-Type': 'application/json',
         },
+        console.log("Raw data from API:", response)
         body: JSON.stringify({ input }),
       })
   
@@ -41,18 +42,12 @@ export function Dashboard() {
       }
   
       const data = await response.json()
-      console.log("Raw data from API:", data)  // Log the raw data here
-      console.log("Received suggestions:", data.suggestions)  // Log the suggestions
-  
-      // Ensure suggestions is always an array
-      const newSuggestions = Array.isArray(data.suggestions) ? data.suggestions : PLACEHOLDER_SUGGESTIONS
-      console.log("Setting suggestions to:", newSuggestions)  // Log what we're setting
-  
-      setSuggestions(newSuggestions)
+      console.log("Received suggestions:", data.suggestions)
+      setSuggestions(data.suggestions || PLACEHOLDER_SUGGESTIONS)
     } catch (error) {
       console.error('Error:', error)
       setError('Failed to fetch suggestions. Please try again.')
-      setSuggestions(PLACEHOLDER_SUGGESTIONS)  // Use PLACEHOLDER_SUGGESTIONS directly here
+      setSuggestions(PLACEHOLDER_SUGGESTIONS)
     } finally {
       setIsLoading(false)
     }

@@ -52,7 +52,7 @@ export function Dashboard() {
     } catch (error) {
       console.error('Error:', error)
       setError('Failed to fetch suggestions. Please try again.')
-      setSuggestions(PLACEHOLDER_SUGGESTIONS)  // Use PLACEHOLDER_SUGGESTIONS directly here
+      setSuggestions(Array.isArray(data.suggestions) ? data.suggestions : PLACEHOLDER_SUGGESTIONS)
     } finally {
       setIsLoading(false)
     }
