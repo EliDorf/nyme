@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Groq } from 'groq-sdk';
 
+// Initialize Groq client
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
@@ -8,36 +9,30 @@ const groq = new Groq({
 export async function POST(request: Request) {
   try {
     const { input } = await request.json();
-    console.log("Received input:", input);
+    console.log("Received input:", input);  // Log the input
 
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are a creative naming assistant. Generate 5 creative name variations based on the given input. Return only a JSON object with a 'suggestions' key containing an array of string suggestions."
-        },
-        {
-          role: "user",
-          content: `Generate creative name variations for: ${input}`
-        }
-      ],
-      model: "mixtral-8x7b-32768", // You can change this to another model if needed
-      temperature: 0.7,
+    const completion = await groq.completions.create({
+      model: "llama3-8b-8192",
+      prompt: `Generate 5 creative name variations for "${input}". Return the result as a JSON object with a 'suggestions' key containing an array of string suggestions. For example, if the input is "apple", the output might be:
+      {
+        "suggestions": ["Appy", "Apples", "Appen", "Plen", "Ppen"]
+      }`,
       max_tokens: 150,
+      temperature: 0.7,
       top_p: 1,
+      stop: ["}"],
       stream: false,
-      response_format: { type: "json_object" }
     });
 
-    console.log("Raw Groq response:", chatCompletion);
+    console.log("Raw Groq response:", completion);  // Log the raw response
 
-    const content = chatCompletion.choices[0]?.message?.content;
-    console.log("Content from Groq:", content);
+    const content = completion.choices[0]?.text;
+    console.log("Content from Groq:", content);  // Log the content
 
     if (content) {
       try {
-        const parsedContent = JSON.parse(content);
-        console.log("Parsed content:", parsedContent);
+        const parsedContent = JSON.parse(content + '}');  // Add closing brace as we used it as a stop token
+        console.log("Parsed content:", parsedContent);  // Log the parsed content
         
         if (Array.isArray(parsedContent.suggestions)) {
           return NextResponse.json({ suggestions: parsedContent.suggestions });
