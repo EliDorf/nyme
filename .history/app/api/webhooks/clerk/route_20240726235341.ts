@@ -57,26 +57,30 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
  // CREATE
-  if (eventType === "user.created") {
-    const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
-  
-    const user: CreateUserParams = {
-      clerkId: id,
-      email: email_addresses[0]?.email_address ?? '',
-      username: username ?? '',
-      firstName: first_name ?? '',
-      lastName: last_name ?? '',
-      photo: image_url ?? '',
-    };
+  if (eventType === 'user.created') {
+    const { id, email_addresses, first_name, last_name, image_url } = evt.data
 
-    if (!id || !email_addresses) {
-      return new Response('Error occurred -- missing data', {
-        status: 405
-      })
-    const newUser = await createUser(user);
-  
-    // ... rest of the code
-  }
+ 
+    }
+    if (eventType === "user.created") {
+      const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+    
+      const user: CreateUserParams = {
+        clerkId: id,
+        email: email_addresses[0]?.email_address ?? '',
+        username: username ?? '',
+        firstName: first_name ?? '',
+        lastName: last_name ?? '',
+        photo: image_url ?? '',
+      };
+      if (!id || !email_addresses) {
+        return new Response('Error occurred -- missing data', {
+          status: 405
+        })
+      const newUser = await createUser(user);
+    
+      // ... rest of the code
+    }
   }
 
 return new Response('', { status: 200 })
