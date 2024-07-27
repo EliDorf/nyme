@@ -6,11 +6,11 @@ import React, { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const PLACEHOLDER_SUGGESTIONS = [
-  "Names",
-  "Nyme",
-  "Namin",
-  "Amin",
-  "Namye"
+  "creativestudio",
+  "creativestudio123",
+  "creativestudioco",
+  "creativestudioinc",
+  "creativestudiodesign"
 ];
 
 export function Dashboard() {
@@ -22,27 +22,28 @@ export function Dashboard() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
   }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
     
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/suggestions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ input }),
       })
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-  
+
       const data = await response.json()
       console.log("Received suggestions:", data.suggestions)
-      setSuggestions(data.suggestions || PLACEHOLDER_SUGGESTIONS)
+      setSuggestions(data.suggestions.length > 0 ? data.suggestions : PLACEHOLDER_SUGGESTIONS)
     } catch (error) {
       console.error('Error:', error)
       setError('Failed to fetch suggestions. Please try again.')
@@ -51,6 +52,7 @@ export function Dashboard() {
       setIsLoading(false)
     }
   }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 w-full max-w-6xl mx-auto py-12 px-4 md:px-6">
       <div className="flex flex-col gap-4">

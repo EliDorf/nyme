@@ -6,11 +6,11 @@ import React, { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const PLACEHOLDER_SUGGESTIONS = [
-  "Names",
-  "Nyme",
-  "Namin",
-  "Amin",
-  "Namye"
+  "creativestudio",
+  "creativestudio123",
+  "creativestudioco",
+  "creativestudioinc",
+  "creativestudiodesign"
 ];
 
 export function Dashboard() {
@@ -22,27 +22,28 @@ export function Dashboard() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
   }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
     
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/suggestions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ input }),
       })
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-  
+
       const data = await response.json()
       console.log("Received suggestions:", data.suggestions)
-      setSuggestions(data.suggestions || PLACEHOLDER_SUGGESTIONS)
+      setSuggestions(data.suggestions.length > 0 ? data.suggestions : PLACEHOLDER_SUGGESTIONS)
     } catch (error) {
       console.error('Error:', error)
       setError('Failed to fetch suggestions. Please try again.')
@@ -51,6 +52,7 @@ export function Dashboard() {
       setIsLoading(false)
     }
   }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 w-full max-w-6xl mx-auto py-12 px-4 md:px-6">
       <div className="flex flex-col gap-4">
@@ -89,121 +91,67 @@ export function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-5 md:grid-cols-5 gap-2">
-          <Button
-            variant="outline"
-            className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            .com
-          </Button>
-          <Button
-            variant="outline"
-            className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            .io
-          </Button>
-          <Button
-            variant="outline"
-            className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            .ai
-          </Button>
-          <Button
-            variant="outline"
-            className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            .co
-          </Button>
-          <Button
-            variant="outline"
-            className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            .net
-          </Button>
-        </div>
-        <div className="border rounded-lg overflow-auto shadow-md">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Available Domains</TableHead>
-                <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Not Available</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2">
-                    <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
-                    <span>creativestudio.com</span>
-                  </div>
-                </TableCell>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                    <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
-                    <span>creativestudio.io</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2">
-                    <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
-                    <span>creativestudio.ai</span>
-                  </div>
-                </TableCell>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                    <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
-                    <span>creativestudio123.com</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2">
-                    <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
-                    <span>creativestudio.co</span>
-                  </div>
-                </TableCell>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                    <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
-                    <span>creativestudioco.com</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2">
-                    <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
-                    <span>creativestudio.net</span>
-                  </div>
-                </TableCell>
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                    <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
-                    <span>creativestudioinc.com</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="py-2 px-4" />
-                <TableCell className="py-2 px-4">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                    <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
-                    <span>creativestudiodesign.com</span>
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
+return (
+  <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 w-full max-w-6xl mx-auto py-12 px-4 md:px-6">
+    {/* Existing content */}
+    <div className="flex flex-col gap-4">
+      {/* ... (your existing code for input, button, and suggestions) ... */}
+    </div>
+
+    {/* New content */}
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-5 md:grid-cols-5 gap-2">
+        <Button
+          variant="outline"
+          className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          .com
+        </Button>
+        <Button
+          variant="outline"
+          className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          .io
+        </Button>
+        <Button
+          variant="outline"
+          className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          .ai
+        </Button>
+        <Button
+          variant="outline"
+          className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          .co
+        </Button>
+        <Button
+          variant="outline"
+          className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          .net
+        </Button>
       </div>
+      <div className="border rounded-lg overflow-auto shadow-md">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Available Domains</TableHead>
+              <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Not Available</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {/* ... (Add the TableRow components here) ... */}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </div>
+)
+      
     </div>
   )
 }
-
 
 function SparkleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (

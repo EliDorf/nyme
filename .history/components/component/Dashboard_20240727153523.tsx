@@ -28,7 +28,7 @@ export function Dashboard() {
     setError(null)
     
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/generate-names', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
