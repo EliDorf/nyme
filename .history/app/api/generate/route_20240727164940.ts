@@ -2,30 +2,29 @@ import { NextResponse } from 'next/server';
 import { Groq } from 'groq-sdk';
 import NameSuggestion from '@/lib/database/models/NameSuggestion'; // Adjust the import path as needed
 import { connectToDatabase } from '@/lib/database/mongoose'; // Assuming you have a function to connect to MongoDB
-import { getAuth } from "@clerk/nextjs/server";
-import { NextRequest } from 'next/server';
+import { auth } from '@clerk/nextjs'; // Import auth from Clerk if you're using it
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     // Connect to the database
     await connectToDatabase();
 
-    // Get the user ID from Clerk
-    const { userId } = getAuth(request);
+    // Get the user ID from Clerk, if you're using Clerk
+    const { userId } = auth();
 
-    const body = await request.json();
-    const { input } = body;
+    const { input } = await request.json();
     console.log("Received input:", input, "for userId:", userId);
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         {
           role: "system",
-          content: "You are a creative naming assistant. Generate 5 creative name variations based on the given input. Return only a JSON object with a 'suggestions' key containing an array of string suggestions. For example, if the input is 'apple', the output might be: {'suggestions': ['Appy', 'Apples', 'Appen', 'Plen', 'Ppen'] }, another example, if the input is 'Bask', the output might be: {'suggestions': ['Basky', 'Basken', 'Asky', 'Basen', 'Basre'] }"        },
+          content: "You are a creative naming assistant. Generate 5 creative name variations based on the given input. Return only a JSON object with a 'suggestions' key containing an array of string suggestions."
+        },
         {
           role: "user",
           content: `Generate creative name variations for: ${input}`

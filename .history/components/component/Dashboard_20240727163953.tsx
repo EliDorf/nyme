@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useUser } from '@clerk/nextjs'
 
 const PLACEHOLDER_SUGGESTIONS = [
   "Names",
@@ -19,12 +18,10 @@ export function Dashboard() {
   const [suggestions, setSuggestions] = useState<string[]>(PLACEHOLDER_SUGGESTIONS)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { user } = useUser()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value)
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -36,10 +33,7 @@ export function Dashboard() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          input,
-          userId: user?.id || 'anonymous' // Include the userId here
-        }),
+        body: JSON.stringify({ input }),
       })
   
       if (!response.ok) {

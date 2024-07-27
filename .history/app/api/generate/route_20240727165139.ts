@@ -25,7 +25,8 @@ export async function POST(request: NextRequest) {
       messages: [
         {
           role: "system",
-          content: "You are a creative naming assistant. Generate 5 creative name variations based on the given input. Return only a JSON object with a 'suggestions' key containing an array of string suggestions. For example, if the input is 'apple', the output might be: {'suggestions': ['Appy', 'Apples', 'Appen', 'Plen', 'Ppen'] }, another example, if the input is 'Bask', the output might be: {'suggestions': ['Basky', 'Basken', 'Asky', 'Basen', 'Basre'] }"        },
+          content: "You are a creative naming assistant. Generate 5 creative name variations based on the given input. Return only a JSON object with a 'suggestions' key containing an array of string suggestions."
+        },
         {
           role: "user",
           content: `Generate creative name variations for: ${input}`
