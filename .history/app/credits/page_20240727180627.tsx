@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { plans } from "@/constants";
 import { getUserById } from "@/lib/actions/user.action";
 import Checkout from "@/components/shared/Checkout";
-import { NewSidebar } from "@/components/shared/new-sidebar";
 
 const Credits = async () => {
   const { userId } = auth();
@@ -16,7 +15,7 @@ const Credits = async () => {
   const user = await getUserById(userId);
 
   return (
-    <><div className='.sidebar'><NewSidebar /></div>
+    <>
       <section className="credits-section">
         <ul className="credits-list">
           {plans.map((plan) => (
@@ -66,4 +65,3 @@ const Credits = async () => {
 };
 
 export default Credits;
-

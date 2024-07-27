@@ -66,12 +66,12 @@
   body {
     @apply bg-background text-foreground;
   }
-}.credits-section {
+}
+.credits-section {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  background-color: #f9fafb; /* Light background for contrast */
 }
 
 .credits-list {
@@ -88,11 +88,6 @@
   padding: 2rem;
   max-width: 300px;
   text-align: center;
-  transition: transform 0.3s;
-}
-
-.credits-item:hover {
-  transform: translateY(-10px);
 }
 
 .flex-center {
@@ -106,20 +101,19 @@
 }
 
 .plan-name {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #6B46C1;
 }
 
 .plan-price {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #2D3748;
-  margin: 1rem 0;
 }
 
 .plan-credits {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #4A5568;
 }
 
@@ -142,66 +136,5 @@
 }
 
 .credits-btn {
-  margin-top: 0.25rem;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #6B46C1;
-  color: #fff;
-  background-color: #6B46C1;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  transition: background-color 0.3s, color 0.3s;
+  margin-top: 1rem;
 }
-
-.credits-btn:hover {
-  background-color: #4C2C8A;
-  color: #fff;
-}
-
-@media (max-width: 768px) {
-  .credits-list {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-.checkoutButton {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  background-color: #6B46C1;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.checkoutButton:hover {
-  background-color: #4C2C8A;
-  transform: translateY(-2px);
-}
-
-.success-toast {
-  background-color: #38A169; /* Green background for success */
-  color: white;
-}
-
-.error-toast {
-  background-color: #E53E3E; /* Red background for error */
-  color: white;
-}
-
-.cl-userButtonBox {
-  display: flex;
-  flex-flow: row-reverse;
-  gap: 12px;
-}
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-  font-weight: 600;
-  color: #384262;
-}
-

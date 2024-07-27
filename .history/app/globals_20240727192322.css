@@ -204,4 +204,30 @@
   font-weight: 600;
   color: #384262;
 }
+/* Profile Page */
+.profile {
+  @apply mt-5 flex flex-col gap-5 sm:flex-row md:mt-8 md:gap-10;
+}
 
+.profile-balance {
+  @apply w-full rounded-[16px] border-2 bg-white p-5 shadow-lg md:px-6 md:py-8;
+  border-color: rgba(255, 255, 255, 0.2); /* Custom border color with opacity */
+  box-shadow: 0 10px 15px -3px rgba(233, 216, 253, 0.1), 0 4px 6px -2px rgba(233, 216, 253, 0.05); /* Custom shadow color with opacity */
+}
+
+.profile-image-manipulation {
+  @apply w-full rounded-[16px] border-2 bg-white p-5 shadow-lg md:px-6 md:py-8;
+  border-color: rgba(233, 216, 253, 0.2); /* Custom border color with opacity */
+  box-shadow: 0 10px 15px -3px rgba(233, 216, 253, 0.1), 0 4px 6px -2px rgba(233, 216, 253, 0.05); /* Custom shadow color with opacity */
+}
+
+.sidebar {
+  width: 250px; /* Adjust as needed */
+  background-color: #ffffff; /* or your sidebar color */
+  height: 100vh; /* Full height */
+  position: fixed; /* Fix the sidebar */
+  left: 0;
+  top: 0;
+  padding: 1rem; /* Add padding if needed */
+  box-shadow: 2px 0 5px rgba(255, 255, 255, 0.932); /* Optional shadow for better visibility */
+}

@@ -142,7 +142,7 @@
 }
 
 .credits-btn {
-  margin-top: 0.25rem;
+  margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #6B46C1;
   color: #fff;
@@ -163,6 +163,13 @@
     flex-direction: column;
     align-items: center;
   }
+}
+
+.checkoutForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 .checkoutButton {
@@ -192,16 +199,3 @@
   background-color: #E53E3E; /* Red background for error */
   color: white;
 }
-
-.cl-userButtonBox {
-  display: flex;
-  flex-flow: row-reverse;
-  gap: 12px;
-}
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-  font-weight: 600;
-  color: #384262;
-}
-

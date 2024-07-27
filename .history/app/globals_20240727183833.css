@@ -142,14 +142,14 @@
 }
 
 .credits-btn {
-  margin-top: 0.25rem;
+  margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #6B46C1;
   color: #fff;
   background-color: #6B46C1;
   font-size: 1rem;
   font-weight: bold;
-  border-radius: 4px;
+  border-radius: 40px;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -163,6 +163,105 @@
     flex-direction: column;
     align-items: center;
   }
+}
+
+
+
+
+
+
+
+.credits-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f9fafb; /* Light background for contrast */
+}
+
+.credits-list {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+}
+
+.credits-item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 300px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.credits-item:hover {
+  transform: translateY(-10px);
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.plan-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #6B46C1;
+}
+
+.plan-price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2D3748;
+  margin: 1rem 0;
+}
+
+.plan-credits {
+  font-size: 1.1rem;
+  color: #4A5568;
+}
+
+.inclusions-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.inclusion-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.inclusion-label {
+  font-size: 1rem;
+  color: #4A5568;
+}
+
+.credits-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #6B46C1;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.credits-btn:hover {
+  background-color: #4C2C8A;
+  transform: translateY(-2px);
 }
 
 .checkoutButton {
@@ -193,15 +292,9 @@
   color: white;
 }
 
-.cl-userButtonBox {
-  display: flex;
-  flex-flow: row-reverse;
-  gap: 12px;
+@media (max-width: 768px) {
+  .credits-list {
+    flex-direction: column;
+    align-items: center;
+  }
 }
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-  font-weight: 600;
-  color: #384262;
-}
-

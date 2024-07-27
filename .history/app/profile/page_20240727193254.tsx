@@ -11,7 +11,7 @@ interface ProfileProps {
   };
 }
 
-const Profile = async ({ searchParams }: ProfileProps) => {
+const Profile = async ({ searchParams }) => {
   const page = Number(searchParams?.page) || 1;
   const { userId } = auth();
 

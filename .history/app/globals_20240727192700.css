@@ -204,4 +204,25 @@
   font-weight: 600;
   color: #384262;
 }
+/* Profile Page */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Additional custom styles if needed */
+.profile {
+  @apply flex flex-col gap-5 sm:flex-row md:mt-8 md:gap-10;
+}
+
+.profile-balance, .profile-image-manipulation {
+  @apply w-full rounded-lg border bg-white p-5 shadow-md md:px-6 md:py-8;
+}
+
+.profile-balance p, .profile-image-manipulation p {
+  @apply text-xl font-semibold text-gray-700;
+}
+
+.profile-balance h2, .profile-image-manipulation h2 {
+  @apply text-2xl font-bold text-gray-800;
+}

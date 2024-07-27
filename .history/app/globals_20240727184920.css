@@ -142,7 +142,7 @@
 }
 
 .credits-btn {
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   padding: 0.75rem 1.5rem;
   border: 2px solid #6B46C1;
   color: #fff;
@@ -192,16 +192,3 @@
   background-color: #E53E3E; /* Red background for error */
   color: white;
 }
-
-.cl-userButtonBox {
-  display: flex;
-  flex-flow: row-reverse;
-  gap: 12px;
-}
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-  font-weight: 600;
-  color: #384262;
-}
-

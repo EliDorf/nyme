@@ -204,4 +204,15 @@
   font-weight: 600;
   color: #384262;
 }
+/* Profile Page */
 
+.sidebar {
+  width: 250px; /* Adjust as needed */
+  background-color: #ffffff; /* or your sidebar color */
+  height: 100vh; /* Full height */
+  position: fixed; /* Fix the sidebar */
+  left: 0;
+  top: 0;
+  padding: 1rem; /* Add padding if needed */
+  box-shadow: 2px 0 5px rgba(255, 255, 255, 0.932); /* Optional shadow for better visibility */
+}

@@ -16,7 +16,7 @@ const Credits = async () => {
   const user = await getUserById(userId);
 
   return (
-    <><div className='.sidebar'><NewSidebar /></div>
+    <><NewSidebar />
       <section className="credits-section">
         <ul className="credits-list">
           {plans.map((plan) => (

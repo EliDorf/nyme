@@ -204,4 +204,19 @@
   font-weight: 600;
   color: #384262;
 }
+/* Profile Page */
+.profile {
+  @apply mt-5 flex flex-col gap-5 sm:flex-row md:mt-8 md:gap-10;
+}
 
+.profile-balance {
+  @apply w-full rounded-[16px] border-2 bg-white p-5 shadow-lg md:px-6 md:py-8;
+  border-color: rgba(183, 148, 244, 0.2); /* Custom border color */
+  box-shadow: 0 10px 15px -3px rgba(183, 148, 244, 0.1), 0 4px 6px -2px rgba(183, 148, 244, 0.05); /* Custom shadow color */
+}
+
+.profile-image-manipulation {
+  @apply w-full rounded-[16px] border-2 bg-white p-5 shadow-lg md:px-6 md:py-8;
+  border-color: rgba(183, 148, 244, 0.2); /* Custom border color */
+  box-shadow: 0 10px 15px -3px rgba(183, 148, 244, 0.1), 0 4px 6px -2px rgba(183, 148, 244, 0.05); /* Custom shadow color */
+}

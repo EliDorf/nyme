@@ -1,4 +1,5 @@
 import { Dashboard } from '@/components/component/Dashboard';
+import { Sidebar } from '@/components/shared/Sidebar';
 import React from 'react';
 import { NewSidebar } from '@/components/shared/new-sidebar';
 

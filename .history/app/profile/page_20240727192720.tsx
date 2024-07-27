@@ -5,13 +5,7 @@ import { redirect } from "next/navigation";
 import { getUserById } from "@/lib/actions/user.action";
 import { NewSidebar } from "@/components/shared/new-sidebar";
 
-interface ProfileProps {
-  searchParams: {
-    page?: string;
-  };
-}
-
-const Profile = async ({ searchParams }: ProfileProps) => {
+const Profile = async ({ searchParams }) => {
   const page = Number(searchParams?.page) || 1;
   const { userId } = auth();
 
@@ -20,14 +14,14 @@ const Profile = async ({ searchParams }: ProfileProps) => {
   const user = await getUserById(userId);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+    <div className="flex">
       <NewSidebar />
-      <main className="ml-24 p-4 md:ml-64 md:p-8 w-full">
-        <h1 className="text-4xl font-extrabold text-white mb-6">Profile</h1>
+      <main className="ml-24 p-4 md:ml-64 md:p-8 w-full"> {/* Adjust margins based on your sidebar width */}
+        <h1 className="text-3xl font-bold mb-6">Profile</h1>
 
         <section className="profile flex flex-col gap-6">
-          <div className="profile-balance bg-white rounded-lg border border-gray-200 p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300">
-            <p className="text-2xl font-semibold text-gray-700">Credits Available</p>
+          <div className="profile-balance bg-white rounded-lg border border-gray-200 p-6 shadow-md">
+            <p className="text-xl font-semibold text-gray-700">Credits Available</p>
             <div className="mt-4 flex items-center gap-4">
               <Image
                 src="/assets/icons/coins.svg"
@@ -36,21 +30,21 @@ const Profile = async ({ searchParams }: ProfileProps) => {
                 height={50}
                 className="w-12 h-12"
               />
-              <h2 className="text-3xl font-bold text-gray-800">{user.creditBalance}</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{user.creditBalance}</h2>
             </div>
           </div>
 
-          <div className="profile-image-manipulation bg-white rounded-lg border border-gray-200 p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300">
-            <p className="text-2xl font-semibold text-gray-700">Name History</p>
+          <div className="profile-image-manipulation bg-white rounded-lg border border-gray-200 p-6 shadow-md">
+            <p className="text-xl font-semibold text-gray-700">Image Manipulation Done</p>
             <div className="mt-4 flex items-center gap-4">
               <Image
                 src="/assets/icons/photo.svg"
-                alt="photo"
+                alt="photos"
                 width={50}
                 height={50}
                 className="w-12 h-12"
               />
-              <h2 className="text-3xl font-bold text-gray-800"> {/* Replace with actual data */}</h2>
+              <h2 className="text-2xl font-bold text-gray-800"> {/* Replace with actual data */}</h2>
             </div>
           </div>
         </section>

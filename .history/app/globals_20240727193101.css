@@ -205,3 +205,19 @@
   color: #384262;
 }
 
+/* Additional custom styles if needed */
+.profile {
+  @apply flex flex-col gap-6 sm:flex-row md:mt-8 md:gap-10;
+}
+
+.profile-balance, .profile-image-manipulation {
+  @apply w-full rounded-lg border bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-2xl;
+}
+
+.profile-balance p, .profile-image-manipulation p {
+  @apply text-2xl font-semibold text-gray-700;
+}
+
+.profile-balance h2, .profile-image-manipulation h2 {
+  @apply text-3xl font-bold text-gray-800;
+}

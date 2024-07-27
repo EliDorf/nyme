@@ -165,43 +165,30 @@
   }
 }
 
-.checkoutButton {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  background-color: #6B46C1;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
+/* Profile Page */
+.profile {
+  @apply mt-5 flex flex-col gap-5 sm:flex-row md:mt-8 md:gap-10;
 }
 
-.checkoutButton:hover {
-  background-color: #4C2C8A;
-  transform: translateY(-2px);
+.profile-balance {
+  @apply w-full rounded-[16px] border-2 bg-white p-5 shadow-lg md:px-6 md:py-8;
+  border-color: rgba(255, 255, 255, 0.2); /* Custom border color with opacity */
+  box-shadow: 0 10px 15px -3px rgba(233, 216, 253, 0.1), 0 4px 6px -2px rgba(233, 216, 253, 0.05); /* Custom shadow color with opacity */
 }
 
-.success-toast {
-  background-color: #38A169; /* Green background for success */
-  color: white;
+.profile-image-manipulation {
+  @apply w-full rounded-[16px] border-2 bg-white p-5 shadow-lg md:px-6 md:py-8;
+  border-color: rgba(233, 216, 253, 0.2); /* Custom border color with opacity */
+  box-shadow: 0 10px 15px -3px rgba(233, 216, 253, 0.1), 0 4px 6px -2px rgba(233, 216, 253, 0.05); /* Custom shadow color with opacity */
 }
 
-.error-toast {
-  background-color: #E53E3E; /* Red background for error */
-  color: white;
+.sidebar {
+  width: 250px; /* Adjust as needed */
+  background-color: #ffffff; /* or your sidebar color */
+  height: 100vh; /* Full height */
+  position: fixed; /* Fix the sidebar */
+  left: 0;
+  top: 0;
+  padding: 1rem; /* Add padding if needed */
+  box-shadow: 2px 0 5px rgba(255, 255, 255, 0.932); /* Optional shadow for better visibility */
 }
-
-.cl-userButtonBox {
-  display: flex;
-  flex-flow: row-reverse;
-  gap: 12px;
-}
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-  font-weight: 600;
-  color: #384262;
-}
-

@@ -142,8 +142,8 @@
 }
 
 .credits-btn {
-  margin-top: 0.25rem;
-  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  padding: 5rem 1.5rem;
   border: 2px solid #6B46C1;
   color: #fff;
   background-color: #6B46C1;
@@ -165,43 +165,9 @@
   }
 }
 
-.checkoutButton {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  background-color: #6B46C1;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
 
-.checkoutButton:hover {
-  background-color: #4C2C8A;
-  transform: translateY(-2px);
-}
 
-.success-toast {
-  background-color: #38A169; /* Green background for success */
-  color: white;
-}
 
-.error-toast {
-  background-color: #E53E3E; /* Red background for error */
-  color: white;
-}
 
-.cl-userButtonBox {
-  display: flex;
-  flex-flow: row-reverse;
-  gap: 12px;
-}
 
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-  font-weight: 600;
-  color: #384262;
-}
 
