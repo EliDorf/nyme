@@ -5,7 +5,6 @@ import { createUser, deleteUser, updateUser } from "@/lib/actions/user.action";
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  console.log("🔔 Webhook received");
   try {
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
 
@@ -18,9 +17,7 @@ export async function POST(req: Request) {
     const svix_timestamp = headerPayload.get("svix-timestamp");
     const svix_signature = headerPayload.get("svix-signature");
 
-    if (!svix_id || !svix_timestamp || !svix_signature)
-       {
-        console.error("❌ Error: Missing svix headers");
+    if (!svix_id || !svix_timestamp || !svix_signature) {
       return new Response('Error occurred -- no svix headers', {
         status: 400
       })
@@ -56,12 +53,11 @@ export async function POST(req: Request) {
       case "user.deleted":
         return handleUserDeleted(evt.data);
       default:
-        console.log(`🤔 Unhandled webhook event type: ${eventType}`);
+        console.log(`Unhandled webhook event type: ${eventType}`);
         return new Response('', { status: 200 });
     }
-    return NextResponse.json({ message: "Webhook processed successfully" });
   } catch (error) {
-    console.error('❌ Error processing webhook:', error);
+    console.error('Error processing webhook:', error);
     return new Response('Error occurred', { status: 500 })
   }
 }
@@ -86,7 +82,7 @@ async function handleUserCreated(data: WebhookEvent['data']) {
     lastName: last_name ?? '',
     photo: image_url ?? '',
   };
-  console.log("👤 Creating user:", user);
+
   const newUser = await createUser(user);
 
   if (newUser) {
@@ -115,7 +111,6 @@ async function handleUserUpdated(data: WebhookEvent['data']) {
     photo: image_url ?? '',
   };
 
-  console.log("📝 Updating user:", id, user);
   const updatedUser = await updateUser(id, user);
 
   return NextResponse.json({ message: "OK", user: updatedUser });
@@ -128,8 +123,8 @@ async function handleUserDeleted(data: WebhookEvent['data']) {
 
   const { id } = data;
 
-  console.log("🗑️ Deleting user:", id);
   const deletedUser = await deleteUser(id);
 
   return NextResponse.json({ message: "OK", user: deletedUser });
+}
 }

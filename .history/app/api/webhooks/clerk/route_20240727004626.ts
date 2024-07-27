@@ -115,7 +115,6 @@ async function handleUserUpdated(data: WebhookEvent['data']) {
     photo: image_url ?? '',
   };
 
-  console.log("📝 Updating user:", id, user);
   const updatedUser = await updateUser(id, user);
 
   return NextResponse.json({ message: "OK", user: updatedUser });
@@ -128,7 +127,6 @@ async function handleUserDeleted(data: WebhookEvent['data']) {
 
   const { id } = data;
 
-  console.log("🗑️ Deleting user:", id);
   const deletedUser = await deleteUser(id);
 
   return NextResponse.json({ message: "OK", user: deletedUser });
