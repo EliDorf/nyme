@@ -127,3 +127,4 @@ async function handleUserDeleted(data: WebhookEvent['data']) {
 
   return NextResponse.json({ message: "OK", user: deletedUser });
 }
+}

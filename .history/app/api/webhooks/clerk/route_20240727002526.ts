@@ -117,8 +117,8 @@ async function handleUserUpdated(data: WebhookEvent['data']) {
 }
 
 async function handleUserDeleted(data: WebhookEvent['data']) {
-  if (!('id' in data) || typeof data.id !== 'string') {
-    return new Response('Error occurred -- invalid or missing id', { status: 400 });
+  if (!('id' in data)) {
+    return new Response('Error occurred -- invalid data format', { status: 400 });
   }
 
   const { id } = data;
