@@ -6,8 +6,25 @@ import User from "../database/models/user.model";
 import { connectToDatabase } from "../database/mongoose";
 import { handleError } from "../utils";
 import { ObjectId } from 'mongodb';
+import mongoose from "mongoose";
 
 
+type CreateUserParams = {
+  clerkId: string;
+  _id: new mongoose.Types.ObjectId(),
+  email: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  photo?: string;
+};
+
+type UpdateUserParams = {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  photo?: string;
+};
 
 // CREATE
 export async function createUser(user: CreateUserParams) {
