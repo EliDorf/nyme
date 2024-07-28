@@ -91,12 +91,12 @@ export async function deleteUser(clerkId: string) {
 }
 
 // USE CREDITS
-export async function updateCredits(clerkId: string, creditFee: number) {
+export async function updateCredits(userId: string, creditFee: number) {
   try {
     await connectToDatabase();
 
     const updatedUserCredits = await User.findOneAndUpdate(
-      { clerkId },
+      { _id: userId },
       { $inc: { creditBalance: creditFee }},
       { new: true }
     )

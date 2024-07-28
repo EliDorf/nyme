@@ -9,27 +9,21 @@ import { creditFee } from "@/constants"
 import { InsufficientCreditsModal } from "../shared/InsufficientCreditsModal"
 import { useSuggestions } from "./UseSuggestion"
 import { updateCredits } from "@/lib/actions/user.action"
-import { useUserData } from "@/lib/actions/useUserData"
-import { User } from '@/types/user';
 
 export function Dashboard() {
-  const { user } = useUser();
-  const { userData } = useUserData();
-  const { suggestions, isLoading, error, handleSubmit } = useSuggestions();
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState("")
+  const { user } = useUser()
+  const { suggestions, isLoading, error, handleSubmit } = useSuggestions()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
+    setInput(e.target.value)
   }
 
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (user && userData) {
-      await updateCredits(userData.clerkId, creditFee);
-      handleSubmit(input);
-    }
+  const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    handleSubmit(input)
   }
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 w-full max-w-6xl mx-auto py-12 px-4 md:px-6">
       <div className="flex flex-col gap-4">
@@ -46,7 +40,7 @@ export function Dashboard() {
           />
         </div>
         <Button onClick={onSubmit} className="w-full">Submit</Button>
-        {userData && userData.creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
+        {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <div className="border rounded-lg overflow-hidden shadow-md">
           <div className="bg-gray-100 dark:bg-gray-800 py-2 px-4 font-medium">
             Suggestions

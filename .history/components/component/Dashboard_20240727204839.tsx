@@ -7,29 +7,66 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useUser } from '@clerk/nextjs'
 import { creditFee } from "@/constants"
 import { InsufficientCreditsModal } from "../shared/InsufficientCreditsModal"
-import { useSuggestions } from "./UseSuggestion"
 import { updateCredits } from "@/lib/actions/user.action"
-import { useUserData } from "@/lib/actions/useUserData"
-import { User } from '@/types/user';
+
+const PLACEHOLDER_SUGGESTIONS = [
+  "Names",
+  "Nyme",
+  "Namin",
+  "Amin",
+  "Namye"
+];
 
 export function Dashboard() {
-  const { user } = useUser();
-  const { userData } = useUserData();
-  const { suggestions, isLoading, error, handleSubmit } = useSuggestions();
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState("")
+  const [suggestions, setSuggestions] = useState<string[]>(PLACEHOLDER_SUGGESTIONS)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { user } = useUser()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
+    setInput(e.target.value)
   }
 
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (user && userData) {
-      await updateCredits(userData.clerkId, creditFee);
-      handleSubmit(input);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+    await updateCredits(userId, creditFee)
+    
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          input,
+          userId: user?.id || 'anonymous' // Include the userId here
+        }),
+      })
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+  
+      const data = await response.json()
+      console.log("Raw data from API:", data)  // Log the raw data here
+      console.log("Received suggestions:", data.suggestions)  // Log the suggestions
+  
+      // Ensure suggestions is always an array
+      const newSuggestions = Array.isArray(data.suggestions) ? data.suggestions : PLACEHOLDER_SUGGESTIONS
+      console.log("Setting suggestions to:", newSuggestions)  // Log what we're setting
+  
+      setSuggestions(newSuggestions)
+    } catch (error) {
+      console.error('Error:', error)
+      setError('Failed to fetch suggestions. Please try again.')
+      setSuggestions(PLACEHOLDER_SUGGESTIONS)  // Use PLACEHOLDER_SUGGESTIONS directly here
+    } finally {
+      setIsLoading(false)
     }
   }
-  
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 w-full max-w-6xl mx-auto py-12 px-4 md:px-6">
       <div className="flex flex-col gap-4">
@@ -45,8 +82,8 @@ export function Dashboard() {
             className="rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
-        <Button onClick={onSubmit} className="w-full">Submit</Button>
-        {userData && userData.creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
+        <Button onClick={handleSubmit} className="w-full">Submit</Button>
+        {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <div className="border rounded-lg overflow-hidden shadow-md">
           <div className="bg-gray-100 dark:bg-gray-800 py-2 px-4 font-medium">
             Suggestions
