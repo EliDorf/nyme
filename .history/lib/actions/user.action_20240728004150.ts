@@ -8,6 +8,22 @@ import { handleError } from "../utils";
 import { ObjectId } from 'mongodb';
 
 
+type CreateUserParams = {
+  clerkId: string;
+  email: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  photo?: string;
+};
+
+type UpdateUserParams = {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  photo?: string;
+};
+
 // CREATE
 export async function createUser(user: CreateUserParams) {
   try {
@@ -76,6 +92,7 @@ export async function deleteUser(clerkId: string) {
 }
 
 // USE CREDITSimport { ObjectId } from 'mongodb'; // Make sure to import this
+import { ObjectId } from 'mongodb';
 
 export async function updateCredits(userId: string, creditFee: number) {
   try {
@@ -95,8 +112,8 @@ export async function updateCredits(userId: string, creditFee: number) {
     )
 
     if (!updatedUserCredits) {
-      console.log(`User not found for _id: ${userId}`);
-      throw new Error(`User not found for _id: ${userId}`);
+      console.log(`User credits update failed for _id: ${userId}`);
+      throw new Error("User credits update failed");
     }
 
     console.log(`Updated credit balance: ${updatedUserCredits.creditBalance}`);
@@ -104,6 +121,6 @@ export async function updateCredits(userId: string, creditFee: number) {
     return JSON.parse(JSON.stringify(updatedUserCredits));
   } catch (error) {
     console.error("Error in updateCredits:", error);
-    throw error;
+    handleError(error);
   }
 }

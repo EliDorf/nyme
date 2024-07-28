@@ -8,6 +8,22 @@ import { handleError } from "../utils";
 import { ObjectId } from 'mongodb';
 
 
+type CreateUserParams = {
+  clerkId: string;
+  email: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  photo?: string;
+};
+
+type UpdateUserParams = {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  photo?: string;
+};
+
 // CREATE
 export async function createUser(user: CreateUserParams) {
   try {
@@ -76,27 +92,29 @@ export async function deleteUser(clerkId: string) {
 }
 
 // USE CREDITSimport { ObjectId } from 'mongodb'; // Make sure to import this
-
 export async function updateCredits(userId: string, creditFee: number) {
   try {
     await connectToDatabase();
 
-    console.log(`Updating credits for user with _id: ${userId}`);
+    console.log(`Updating credits for user with id: ${userId}`);
     console.log(`Credit fee to be added: ${creditFee}`);
 
-    if (!ObjectId.isValid(userId)) {
-      throw new Error("Invalid user ID format");
+    let query;
+    if (ObjectId.isValid(userId)) {
+      query = { _id: new ObjectId(userId) };
+    } else {
+      query = { clerkId: userId };
     }
 
     const updatedUserCredits = await User.findOneAndUpdate(
-      { _id: new ObjectId(userId) },
+      query,
       { $inc: { creditBalance: creditFee }},
       { new: true }
     )
 
-    if (!updatedUserCredits) {
-      console.log(`User not found for _id: ${userId}`);
-      throw new Error(`User not found for _id: ${userId}`);
+    if(!updatedUserCredits) {
+      console.log(`User credits update failed for id: ${userId}`);
+      throw new Error("User credits update failed");
     }
 
     console.log(`Updated credit balance: ${updatedUserCredits.creditBalance}`);
@@ -104,6 +122,6 @@ export async function updateCredits(userId: string, creditFee: number) {
     return JSON.parse(JSON.stringify(updatedUserCredits));
   } catch (error) {
     console.error("Error in updateCredits:", error);
-    throw error;
+    handleError(error);
   }
 }

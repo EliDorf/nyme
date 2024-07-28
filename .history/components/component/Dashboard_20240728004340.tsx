@@ -25,14 +25,9 @@ export function Dashboard() {
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (user && userData) {
-      try {
-        handleSubmit(input);
-        // Make sure userData._id is the MongoDB ObjectId
-        await updateCredits(userData._id.toString(), creditFee);
-      } catch (error) {
-        console.error("Error in onSubmit:", error);
-        // Handle the error appropriately (e.g., show an error message to the user)
-      }
+      handleSubmit(input);
+      // Assuming userData contains the MongoDB _id as userData._id
+      await updateCredits(userData._id.toString(), creditFee);
     }
   }
   return (

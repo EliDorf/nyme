@@ -25,16 +25,11 @@ export function Dashboard() {
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (user && userData) {
-      try {
-        handleSubmit(input);
-        // Make sure userData._id is the MongoDB ObjectId
-        await updateCredits(userData._id.toString(), creditFee);
-      } catch (error) {
-        console.error("Error in onSubmit:", error);
-        // Handle the error appropriately (e.g., show an error message to the user)
-      }
+      handleSubmit(input);
+      await updateCredits(userData.clerkId, creditFee);
     }
   }
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 w-full max-w-6xl mx-auto dashboard-content">
       <div className="flex flex-col gap-4">
