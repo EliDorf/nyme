@@ -119,3 +119,11 @@ export async function updateCredits(userId: string, creditFee: number) {
     handleError(error);
   }
 }
+
+async function updateCreditsWithClerkId(clerkId: string, creditFee: number) {
+  const user = await User.findOne({ clerkId });
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return updateCredits(user._id.toString(), creditFee);
+}
