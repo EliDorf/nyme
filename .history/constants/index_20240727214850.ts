@@ -100,7 +100,7 @@ export const navLinks = [
       credits: 2000,
       inclusions: [
         {
-          label: "2500 Credits a month",
+          label: "2000 Credits",
           isIncluded: true,
         },
         {
