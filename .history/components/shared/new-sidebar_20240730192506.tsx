@@ -18,7 +18,7 @@ export function NewSidebar() {
         className="fixed top-4 left-4 z-20 md:hidden"
         onClick={toggleSidebar}
       >
-        {isSidebarOpen ? null : <MenuIcon className="h-6 w-6" />}
+        {isSidebarOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
       </button>
       {/* UserButton in top right corner */}
       <div className="fixed top-4 right-4 z-50">

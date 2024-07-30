@@ -5,38 +5,40 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { SignedIn, UserButton } from "@clerk/nextjs"
+
+
 export function NewSidebar() {
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
-  }
+const toggleSidebar = () => {
+  setIsSidebarOpen(!isSidebarOpen)
+}
 
   return (
     <>
-      <button
-        className="fixed top-4 left-4 z-20 md:hidden"
-        onClick={toggleSidebar}
-      >
-        {isSidebarOpen ? null : <MenuIcon className="h-6 w-6" />}
-      </button>
-      {/* UserButton in top right corner */}
-      <div className="fixed top-4 right-4 z-50">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </div>
-
-      {/* Mobile sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-10 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
+    <button
+    className="fixed top-4 left-4 z-20 md:hidden"
+    onClick={toggleSidebar}
+  >
+    {isSidebarOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+  </button>
+      <div className="fixed inset-y-0 left-0 z-10 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden">
         <div className="flex h-12 shrink-0 items-center justify-between px-2">
           <Link href="#" className="flex items-center gap-2 font-semibold" prefetch={false}>
             <MountainIcon className="h-5 w-5" />
-            <span>Nyme.AI</span>
+            <span className="sr-only">Nyme.AI</span>
+            <button onClick={toggleSidebar} className="absolute top-4 right-4">
+              <XIcon className="h-6 w-6" />
+            </button>
           </Link>
-          <button onClick={toggleSidebar} className="p-2">
-            <XIcon className="h-6 w-6" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <img src="output.svg" width="24" height="24" className="rounded-full" alt="Avatar" />
+              </Button>
+            </DropdownMenuTrigger>
+          </DropdownMenu>
         </div>
         <nav className="flex-1 space-y-1 py-2">
           <Link
@@ -45,7 +47,7 @@ export function NewSidebar() {
             prefetch={false}
           >
             <HomeIcon className="h-4 w-4" />
-            <span>Home</span>
+            <span className="sr-only">Home</span>
           </Link>
           <Link
             href="/credits"
@@ -53,7 +55,7 @@ export function NewSidebar() {
             prefetch={false}
           >
             <AwardIcon className="h-4 w-4" />
-            <span>Credits</span>
+            <span className="sr-only">Credits</span>
           </Link>
           <Link
             href="/profile"
@@ -61,17 +63,15 @@ export function NewSidebar() {
             prefetch={false}
           >
             <UserIcon className="h-4 w-4" />
-            <span>Profile</span>
+            <span className="sr-only">Profile</span>
           </Link>
         </nav>
       </div>
-
-      {/* Desktop sidebar */}
-      <div className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col bg-background border-r border-muted md:flex">
+      <div className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col bg-background border-r border-muted md:flex lg:hidden">
         <div className="flex h-16 shrink-0 items-center justify-between px-4">
           <Link href="#" className="flex items-center gap-2 font-semibold" prefetch={false}>
             <MountainIcon className="h-6 w-6" />
-            <span>Nyme.AI</span>
+            <span className="sr-only">Acme Inc</span>
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -103,6 +103,52 @@ export function NewSidebar() {
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
           >
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+            Profile
+          </Link>
+        </nav>
+      </div>
+      <div className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col bg-background border-r border-muted lg:flex">
+        <div className="flex h-16 shrink-0 items-center justify-between px-4">
+          <Link href="#" className="flex items-center gap-2 font-semibold" prefetch={false}>
+            <MountainIcon className="h-6 w-6" />
+            <span className="sr-only">Nyme.AI</span>
+          </Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <img src="output.svg" width="32" height="32" className="rounded-full" alt="Avatar" />
+              </Button>
+            </DropdownMenuTrigger>
+          </DropdownMenu>
+        </div>
+        <nav className="flex-1 space-y-2 py-4">
+          <Link
+            href="/"
+            className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
+            prefetch={false}
+          >
+            <HomeIcon className="h-5 w-5" />
+            Home
+          </Link>
+          <Link
+            href="/credits"
+            className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
+            prefetch={false}
+          >
+            <AwardIcon className="h-5 w-5" />
+            Credits
+          </Link>
+          <Link
+            href="/profile"
+            className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
+            prefetch={false}
+          >
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
             Profile
           </Link>
         </nav>
@@ -131,6 +177,7 @@ function AwardIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
+
 function HomeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -151,6 +198,7 @@ function HomeIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
+
 function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -169,6 +217,7 @@ function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+
 
 function UserIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -190,6 +239,7 @@ function UserIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
+
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -209,7 +259,6 @@ function XIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
-
 function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg

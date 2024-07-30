@@ -18,14 +18,8 @@ export function NewSidebar() {
         className="fixed top-4 left-4 z-20 md:hidden"
         onClick={toggleSidebar}
       >
-        {isSidebarOpen ? null : <MenuIcon className="h-6 w-6" />}
+        {isSidebarOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
       </button>
-      {/* UserButton in top right corner */}
-      <div className="fixed top-4 right-4 z-50">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </div>
 
       {/* Mobile sidebar */}
       <div className={`fixed inset-y-0 left-0 z-10 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
@@ -103,6 +97,9 @@ export function NewSidebar() {
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
           >
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
             Profile
           </Link>
         </nav>

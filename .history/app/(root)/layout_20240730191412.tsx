@@ -6,7 +6,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex h-screen bg-background">
       <NewSidebar/>
-      <div className="flex-1 overflow-y-auto pt-11 p-4">
+      <div className="flex-1 overflow-y-auto p-4">
         <Dashboard />
         {children}
       </div>
