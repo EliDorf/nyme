@@ -101,7 +101,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
       setError('You must be logged in to save domains');
       return;
     }
-  
+    console.log('Current user:', user);
     setIsSaving(true);
     try {
       console.log('Attempting to save domains:', {
@@ -110,7 +110,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
         userId: user.id,
         input: inputDomain
       });
-      console.log('Current user:', user);
+  
       const response = await axios.post('/api/save-domains', {
         domains: [...availableDomains, ...unavailableDomains],
         userId: user.id,
@@ -121,23 +121,20 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   
       if (response.status === 200) {
         console.log("Domains saved successfully");
+        alert('Domains saved successfully!');
       } else {
         throw new Error(`Failed to save domains. Status: ${response.status}`);
       }
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('Error saving domains:', error);
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.error('Response data:', error.response.data);
-          console.error('Response status:', error.response.status);
-          console.error('Response headers:', error.response.headers);
-        } else if (error.request) {
-          console.error('No response received:', error.request);
-        } else {
-          console.error('Error message:', error.message);
-        }
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
       } else {
-        console.error('Unexpected error:', error);
+        console.error('Error message:', error.message);
       }
       setError('Failed to save domains. Please try again.');
     } finally {

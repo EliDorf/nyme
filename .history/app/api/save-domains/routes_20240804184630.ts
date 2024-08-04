@@ -1,6 +1,6 @@
-import DomainSearches from '@/lib/database/models/DomainSearches';
-import { connectToDatabase } from '@/lib/database/mongoose';
 import { NextRequest, NextResponse } from 'next/server';
+import DomainSearches from '@/models/DomainSearches';
+import { connectToDatabase } from '@/utils/database';
 
 export async function POST(request: NextRequest) {
   console.log("Save domains API route called");
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     console.log("Connected to database");
 
     const body = await request.json();
-    console.log("Received body:", body);
+    console.log("Received body:", JSON.stringify(body, null, 2));
 
     const { domains, userId, input } = body;
 
@@ -24,12 +24,12 @@ export async function POST(request: NextRequest) {
       })),
     });
 
-    console.log("Domain search object:", domainSearch);
+    console.log("Domain search object:", JSON.stringify(domainSearch, null, 2));
 
-    await domainSearch.save();
-    console.log("Domain search saved successfully");
+    const savedSearch = await domainSearch.save();
+    console.log("Domain search saved successfully:", JSON.stringify(savedSearch, null, 2));
 
-    return NextResponse.json({ message: 'Domains saved successfully' }, { status: 200 });
+    return NextResponse.json({ message: 'Domains saved successfully', id: savedSearch._id }, { status: 200 });
   } catch (error: unknown) {
     console.error('Error saving domains:', error);
     

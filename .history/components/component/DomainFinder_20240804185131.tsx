@@ -121,6 +121,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   
       if (response.status === 200) {
         console.log("Domains saved successfully");
+        alert('Domains saved successfully!');
       } else {
         throw new Error(`Failed to save domains. Status: ${response.status}`);
       }

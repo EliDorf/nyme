@@ -30,7 +30,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const [hasSearched, setHasSearched] = useState(false);
   const { user } = useUser();
   const [isSaving, setIsSaving] = useState(false);
-  const [domainsChecked, setDomainsChecked] = useState(false);
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -51,12 +50,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
     }
   }, [shouldCheckDomains, inputDomain, suggestions, hasSearched]);
 
-  useEffect(() => {
-    if (domainsChecked && user) {
-      saveDomains();
-    }
-  }, [domainsChecked, user]);
-
   const checkDomains = async () => {
     setIsLoading(true);
     setError(null);
@@ -76,7 +69,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
       });
       setDomains(newDomains);
       setHasSearched(true);
-      setDomainsChecked(true);
     } catch (err) {
       setError('Failed to check domain availability');
       console.error(err);
@@ -96,53 +88,32 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
 
   
   const saveDomains = async () => {
+    console.log("saveDomains function called");
     if (!user) {
-      console.error('No user logged in');
       setError('You must be logged in to save domains');
       return;
     }
-  
+
     setIsSaving(true);
     try {
-      console.log('Attempting to save domains:', {
-        availableDomains,
-        unavailableDomains,
-        userId: user.id,
-        input: inputDomain
-      });
-      console.log('Current user:', user);
       const response = await axios.post('/api/save-domains', {
         domains: [...availableDomains, ...unavailableDomains],
         userId: user.id,
         input: inputDomain
       });
-  
-      console.log('Save domains response:', response);
-  
+
+      console.log("API response:", response);
+
       if (response.status === 200) {
-        console.log("Domains saved successfully");
+        alert('Domains saved successfully!');
       } else {
-        throw new Error(`Failed to save domains. Status: ${response.status}`);
+        throw new Error('Failed to save domains');
       }
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('Error saving domains:', error);
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.error('Response data:', error.response.data);
-          console.error('Response status:', error.response.status);
-          console.error('Response headers:', error.response.headers);
-        } else if (error.request) {
-          console.error('No response received:', error.request);
-        } else {
-          console.error('Error message:', error.message);
-        }
-      } else {
-        console.error('Unexpected error:', error);
-      }
       setError('Failed to save domains. Please try again.');
     } finally {
       setIsSaving(false);
-      setDomainsChecked(false);
     }
   };
 
@@ -150,7 +121,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
       <div className="flex flex-col gap-4">
           {isLoading && <p>Checking domain availability...</p>}
           {error && <p className="text-red-500">{error}</p>}
-          {!isLoading && !error && (
           <div className="border rounded-lg overflow-auto shadow-md">
               <Table>
                   <TableHeader>
@@ -188,7 +158,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                   </TableBody>
               </Table>
           </div>
-            )}
       </div>
   );
 }
