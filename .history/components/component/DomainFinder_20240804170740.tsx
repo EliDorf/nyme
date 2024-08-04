@@ -81,8 +81,8 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
 
   const displayDomains = hasSearched ? domains : placeholderDomains;
   const sortedDomains = [...displayDomains].sort((a, b) => a.domain.length - b.domain.length);
-  const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status)).slice(0, 10);
-  const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status)).slice(0, 10);
+  const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status));
+  const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status));
 
   return (
       <div className="flex flex-col gap-4">

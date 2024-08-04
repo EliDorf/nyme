@@ -81,8 +81,8 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
 
   const displayDomains = hasSearched ? domains : placeholderDomains;
   const sortedDomains = [...displayDomains].sort((a, b) => a.domain.length - b.domain.length);
-  const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status)).slice(0, 10);
-  const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status)).slice(0, 10);
+  const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status));
+  const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status));
 
   return (
       <div className="flex flex-col gap-4">
@@ -95,7 +95,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                           <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Available Domains</TableHead>
                           <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">
                               Not Available ({unavailableDomains.length} domains)
-                              {!hasSearched && <span className="text-xs text-gray-500"> </span>}
+                              {!hasSearched && <span className="text-xs text-gray-500"> (5)</span>}
                           </TableHead>
                       </TableRow>
                   </TableHeader>

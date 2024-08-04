@@ -77,11 +77,7 @@ export function Dashboard() {
           </div>
         </div>
       </div>
-      <DomainFinder 
-        inputDomain={input} 
-        suggestions={suggestions} 
-        shouldCheckDomains={shouldCheckDomains} 
-      />
+      <DomainFinder suggestions={suggestions} />
     </div>
   )
 }

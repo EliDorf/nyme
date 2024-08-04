@@ -31,7 +31,6 @@ export function Dashboard() {
         handleSubmit(input);
         // Make sure userData._id is the MongoDB ObjectId
         await updateCredits(userData._id.toString(), creditFee);
-        setShouldCheckDomains(true);
       } catch (error) {
         console.error("Error in onSubmit:", error);
         // Handle the error appropriately (e.g., show an error message to the user)
@@ -77,11 +76,7 @@ export function Dashboard() {
           </div>
         </div>
       </div>
-      <DomainFinder 
-        inputDomain={input} 
-        suggestions={suggestions} 
-        shouldCheckDomains={shouldCheckDomains} 
-      />
+      <DomainFinder suggestions={suggestions} />
     </div>
   )
 }

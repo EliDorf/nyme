@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import axios from 'axios';
 interface DomainStatus {
@@ -16,16 +16,16 @@ interface Domain {
 interface DomainFinderProps {
   inputDomain: string;
   suggestions: string[];
-  shouldCheckDomains: boolean;
 }
 
 const TLDs = ['.com', '.io', '.ai', '.co', '.net'];
 
-export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: DomainFinderProps) {
+export function DomainFinder({ inputDomain, suggestions }: DomainFinderProps) {
   const [domains, setDomains] = useState<Domain[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const isInitialMount = useRef(true);
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -42,11 +42,19 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   ];
 
   useEffect(() => {
-    if (shouldCheckDomains && suggestions.length > 0 && !hasSearched) {
-      checkDomains();
+    if (suggestions.length > 0) {
+        setHasSuggestions(true);
+    } else {
+        setHasSuggestions(false);
+        setHasSearched(false);
     }
-  }, [shouldCheckDomains, suggestions, hasSearched]);
+}, [suggestions]);
 
+useEffect(() => {
+    if (hasSuggestions && !hasSearched) {
+        checkDomains();
+    }
+}, [hasSuggestions, hasSearched]);
 
   const checkDomains = async () => {
       setIsLoading(true);
@@ -81,8 +89,8 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
 
   const displayDomains = hasSearched ? domains : placeholderDomains;
   const sortedDomains = [...displayDomains].sort((a, b) => a.domain.length - b.domain.length);
-  const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status)).slice(0, 10);
-  const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status)).slice(0, 10);
+  const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status));
+  const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status));
 
   return (
       <div className="flex flex-col gap-4">
@@ -95,7 +103,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                           <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Available Domains</TableHead>
                           <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">
                               Not Available ({unavailableDomains.length} domains)
-                              {!hasSearched && <span className="text-xs text-gray-500"> </span>}
+                              {!hasSearched && <span className="text-xs text-gray-500"> (Placeholder data)</span>}
                           </TableHead>
                       </TableRow>
                   </TableHeader>
