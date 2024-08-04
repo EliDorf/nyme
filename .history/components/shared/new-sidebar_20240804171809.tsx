@@ -5,10 +5,8 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs"
-
 export function NewSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const { user } = useUser()
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
@@ -104,7 +102,7 @@ export function NewSidebar() {
             href="/profile"
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
-          ><UserIcon className="h-4 w-4" />
+          >
             Profile
           </Link>
         </nav>

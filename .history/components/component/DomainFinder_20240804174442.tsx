@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import axios from 'axios';
-import { useUser } from '@clerk/nextjs';
-
 interface DomainStatus {
   domain: string;
   zone: string;
@@ -28,8 +26,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const { user } = useUser();
-  const [isSaving, setIsSaving] = useState(false);
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -115,7 +111,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
       setIsSaving(false);
     }
   };
-
+  
   return (
       <div className="flex flex-col gap-4">
           {isLoading && <p>Checking domain availability...</p>}

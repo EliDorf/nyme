@@ -77,8 +77,16 @@ export function NewSidebar() {
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <img src="output.svg" width="32" height="32" className="rounded-full" alt="Avatar" />
+            <Button variant="ghost" size="icon" className="rounded-full">
+              {user?.imageUrl && (
+                <img 
+                  src={user.imageUrl} 
+                  width="32" 
+                  height="32" 
+                  className="rounded-full" 
+                  alt="User Avatar" 
+                />
+              )}
               </Button>
             </DropdownMenuTrigger>
           </DropdownMenu>
@@ -104,7 +112,7 @@ export function NewSidebar() {
             href="/profile"
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
-          ><UserIcon className="h-4 w-4" />
+          >
             Profile
           </Link>
         </nav>

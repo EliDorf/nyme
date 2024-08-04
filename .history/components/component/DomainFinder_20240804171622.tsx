@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import axios from 'axios';
-import { useUser } from '@clerk/nextjs';
-
 interface DomainStatus {
   domain: string;
   zone: string;
@@ -28,8 +26,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const { user } = useUser();
-  const [isSaving, setIsSaving] = useState(false);
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -88,78 +84,50 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status)).slice(0, 10);
   const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status)).slice(0, 10);
 
-  
-  const saveDomains = async () => {
-    if (!user) {
-      setError('You must be logged in to save domains');
-      return;
-    }
-
-    setIsSaving(true);
-    try {
-      const response = await axios.post('/api/save-domains', {
-        domains: [...availableDomains, ...unavailableDomains],
-        userId: user.id,
-        input: inputDomain
-      });
-      
-      if (response.status === 200) {
-        alert('Domains saved successfully!');
-      } else {
-        throw new Error('Failed to save domains');
-      }
-    } catch (error) {
-      console.error('Error saving domains:', error);
-      setError('Failed to save domains. Please try again.');
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   return (
-      <div className="flex flex-col gap-4">
-          {isLoading && <p>Checking domain availability...</p>}
-          {error && <p className="text-red-500">{error}</p>}
-          <div className="border rounded-lg overflow-auto shadow-md">
-              <Table>
-                  <TableHeader>
-                      <TableRow>
-                          <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Available Domains</TableHead>
-                          <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">
-                              Not Available ({unavailableDomains.length} domains)
-                              {!hasSearched && <span className="text-xs text-gray-500"> </span>}
-                          </TableHead>
-                      </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                      {Array.from({ length: Math.max(availableDomains.length, unavailableDomains.length) }).map((_, index) => (
-                          <TableRow key={index}>
-                              <TableCell className="bg-green-50 dark:bg-green-900">
-                                  {availableDomains[index] && (
-                                      <div className="flex items-center gap-2">
-                                          <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
-                                          <span>{availableDomains[index].domain}</span>
-                                          <span className="text-xs text-gray-500">({availableDomains[index].status.status})</span>
-                                      </div>
-                                  )}
-                              </TableCell>
-                              <TableCell className="py-2 px-4">
-                                  {unavailableDomains[index] && (
-                                      <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                                          <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
-                                          <span>{unavailableDomains[index].domain}</span>
-                                          <span className="text-xs">({unavailableDomains[index].status.status})</span>
-                                      </div>
-                                  )}
-                              </TableCell>
-                          </TableRow>
-                      ))}
-                  </TableBody>
-              </Table>
-          </div>
+    <div className="flex flex-col gap-4">
+      {isLoading && <p>Checking domain availability...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      <div className="border rounded-lg overflow-auto shadow-md">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800 text-lg font-bold">Available Domains</TableHead>
+              <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800 text-lg font-bold">
+                Not Available ({unavailableDomains.length} domains)
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: Math.max(availableDomains.length, unavailableDomains.length) }).map((_, index) => (
+              <TableRow key={index}>
+                <TableCell className="py-2 px-4 bg-green-50 dark:bg-green-900">
+                  {availableDomains[index] && (
+                    <div className="flex items-center gap-2">
+                      <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
+                      <span className="text-green-600 dark:text-green-400 font-semibold">{availableDomains[index].domain}</span>
+                      <span className="text-xs text-green-500 dark:text-green-300">({availableDomains[index].status.status})</span>
+                    </div>
+                  )}
+                </TableCell>
+                <TableCell className="py-2 px-4 bg-red-50 dark:bg-red-900">
+                  {unavailableDomains[index] && (
+                    <div className="flex items-center gap-2">
+                      <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
+                      <span className="text-red-600 dark:text-red-400 font-semibold">{unavailableDomains[index].domain}</span>
+                      <span className="text-xs text-red-500 dark:text-red-300">({unavailableDomains[index].status.status})</span>
+                    </div>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
+    </div>
   );
 }
+
 function DoorClosedIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg

@@ -29,7 +29,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const { user } = useUser();
-  const [isSaving, setIsSaving] = useState(false);
 
   // Placeholder data
   const placeholderDomains: Domain[] = [

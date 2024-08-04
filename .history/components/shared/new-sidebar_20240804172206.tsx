@@ -104,7 +104,18 @@ export function NewSidebar() {
             href="/profile"
             className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
-          ><UserIcon className="h-4 w-4" />
+          >
+            {user?.imageUrl ? (
+              <img 
+                src={user.imageUrl} 
+                width="20" 
+                height="20" 
+                className="rounded-full" 
+                alt="User Avatar" 
+              />
+            ) : (
+              <UserIcon className="h-5 w-5" />
+            )}
             Profile
           </Link>
         </nav>

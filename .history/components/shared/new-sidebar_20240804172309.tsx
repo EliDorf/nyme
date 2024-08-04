@@ -102,10 +102,11 @@ export function NewSidebar() {
           </Link>
           <Link
             href="/profile"
-            className="flex items-center gap-3 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
+            className="flex items-center gap-2 rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
-          ><UserIcon className="h-4 w-4" />
-            Profile
+          >
+            <UserIcon className="h-4 w-4" />
+            <span>Profile</span>
           </Link>
         </nav>
       </div>

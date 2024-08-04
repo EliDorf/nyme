@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import dbConnect from '../../utils/dbConnect';
+import DomainSearches from '../../models/DomainSearches';
 
 
 export async function GET(request: NextRequest) {
