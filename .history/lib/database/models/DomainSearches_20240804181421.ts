@@ -28,4 +28,4 @@ const DomainSearchSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.models.DomainSearch || mongoose.model<IDomainSearch>('DomainSearch', DomainSearchSchema);
+export defa

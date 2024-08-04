@@ -103,8 +103,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
         userId: user.id,
         input: inputDomain
       });
-
-      console.log("API response:", response);
       
       if (response.status === 200) {
         alert('Domains saved successfully!');
