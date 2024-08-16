@@ -242,22 +242,3 @@
 .dark .available-domain-cell:hover {
   background-color: #008000 !important; /* Slightly lighter shade for hover in dark mode */
 }
-
-/* Styles for the not available domain cell */
-.not-available-domain-cell {
-  background-color: #ff4d4d !important; /* Stock market red */
-  transition: background-color 0.3s ease;
-}
-
-.not-available-domain-cell:hover {
-  background-color: #ff3333 !important; /* Slightly darker red for hover */
-}
-
-.dark .not-available-domain-cell {
-  background-color: #c53d3d !important; /* Darker red for dark mode */
-  transition: background-color 0.3s ease;
-}
-
-.dark .not-available-domain-cell:hover {
-  background-color: #e60000 !important; /* Slightly lighter red for hover in dark mode */
-}

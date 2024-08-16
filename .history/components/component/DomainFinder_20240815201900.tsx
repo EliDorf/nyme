@@ -171,7 +171,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                   <TableBody>
                       {Array.from({ length: Math.max(availableDomains.length, unavailableDomains.length) }).map((_, index) => (
                           <TableRow key={index}>
-                              <TableCell className={`py-2 px-4 ${hasSearched ? 'available-domain-cell' : ''}`}>
+                              <TableCell className="bg-[#90EE90] dark:bg-[#006400] text-black dark:text-white">
                                   {availableDomains[index] && (
                                       <div className="flex items-center gap-2">
                                           <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
@@ -180,7 +180,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                                       </div>
                                   )}
                               </TableCell>
-                              <TableCell className={`py-2 px-4 ${hasSearched ? 'not-available-domain-cell' : ''}`}>
+                              <TableCell className="py-2 px-4">
                                   {unavailableDomains[index] && (
                                       <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                                           <DoorClosedIcon className="w-4 h-4 shrink-0 text-red-500" />
