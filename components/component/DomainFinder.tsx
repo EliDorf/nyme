@@ -31,6 +31,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const { user } = useUser();
   const [isSaving, setIsSaving] = useState(false);
   const [domainsChecked, setDomainsChecked] = useState(false);
+  const previousSuggestions = useRef<string[]>([]);
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -45,11 +46,17 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
       { domain: 'Names.com', status: { domain: 'Names.com', zone: 'com', status: 'active', summary: 'active' } },
       { domain: 'Nyme.co', status: { domain: 'Nyme.co', zone: 'co', status: 'active', summary: 'active' } },
   ];
+
   useEffect(() => {
-    if (shouldCheckDomains && (inputDomain || suggestions.length > 0) && !hasSearched) {
+    const suggestionsChanged = JSON.stringify(suggestions) !== JSON.stringify(previousSuggestions.current);
+    if (suggestionsChanged) {
+      setHasSearched(false);
+      previousSuggestions.current = [...suggestions];
+    }
+    if (shouldCheckDomains && (inputDomain || suggestions.length > 0) && (!hasSearched || suggestionsChanged)) {
       checkDomains();
     }
-  }, [shouldCheckDomains, inputDomain, suggestions, hasSearched]);
+  }, [shouldCheckDomains, inputDomain, suggestions]);
 
   useEffect(() => {
     if (domainsChecked && user) {
@@ -94,7 +101,6 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
   const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status)).slice(0, 10);
   const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status)).slice(0, 10);
 
-  
   const saveDomains = async () => {
     if (!user) {
       console.error('No user logged in');
@@ -158,7 +164,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                           <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">Available Domains</TableHead>
                           <TableHead className="py-2 px-4 bg-gray-100 dark:bg-gray-800">
                               Not Available ({unavailableDomains.length} domains)
-                              {!hasSearched && <span className="text-xs text-gray-500"> </span>}
+                              {!hasSearched && <span className="text-xs text-gray-500"> (Placeholder data)</span>}
                           </TableHead>
                       </TableRow>
                   </TableHeader>
@@ -192,6 +198,7 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
       </div>
   );
 }
+
 function DoorClosedIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
