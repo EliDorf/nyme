@@ -78,14 +78,17 @@ async function handleUserCreated(data: WebhookEvent['data']) {
     return new Response('Error occurred -- missing data', { status: 405 });
   }
 
+  const defaultUsername = `user_${id.slice(-6)}`;
+
   const user: CreateUserParams = {
     clerkId: id,
     email: email_addresses[0]?.email_address ?? '',
-    username: username ?? '',
+    username: username || defaultUsername,
     firstName: first_name ?? '',
     lastName: last_name ?? '',
     photo: image_url ?? '',
   };
+
   console.log("👤 Creating user:", user);
   const newUser = await createUser(user);
 
