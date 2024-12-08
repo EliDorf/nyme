@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import type { AppProps } from 'next/app'
 import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import ClarityInit from '../components/clarity-init'
+import Clarity from '@microsoft/clarity';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +24,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
+          {/* Insert ClarityInit to initialize Clarity client-side */}
+          <ClarityInit />
           <main>
             {children}
           </main>
