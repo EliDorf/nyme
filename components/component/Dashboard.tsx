@@ -15,7 +15,7 @@ import { DomainFinder } from './DomainFinder';
 
 export function Dashboard() {
   const { user } = useUser();
-  const { userData } = useUserData();
+  const { userData, refetchUserData } = useUserData();
   const { suggestions, isLoading, error, handleSubmit } = useSuggestions();
   const [input, setInput] = useState("");
   const [shouldCheckDomains, setShouldCheckDomains] = useState(false);
@@ -31,6 +31,7 @@ export function Dashboard() {
         handleSubmit(input);
         // Make sure userData._id is the MongoDB ObjectId
         await updateCredits(userData._id.toString(), creditFee);
+        await refetchUserData(); // Refetch user data after credits are updated
         setShouldCheckDomains(true);
       } catch (error) {
         console.error("Error in onSubmit:", error);
@@ -54,6 +55,7 @@ export function Dashboard() {
           />
         </div>
         <Button onClick={onSubmit} className="w-full">Submit</Button>
+        <p className="text-sm text-gray-500 text-center">Credits remaining: {userData?.creditBalance || 0}</p>
         {userData && userData.creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <div className="border rounded-lg overflow-hidden shadow-md">
           <div className="bg-gray-100 dark:bg-gray-800 py-2 px-4 font-medium">

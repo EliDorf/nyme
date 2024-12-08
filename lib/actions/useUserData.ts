@@ -8,16 +8,16 @@ export function useUserData() {
   const { user } = useUser();
   const [userData, setUserData] = useState<User | null>(null);
 
-  useEffect(() => {
-    async function fetchUserData() {
-      if (user) {
-        const data = await getUserById(user.id);
-        setUserData(data);
-      }
+  const fetchUserData = async () => {
+    if (user) {
+      const data = await getUserById(user.id);
+      setUserData(data);
     }
+  };
 
+  useEffect(() => {
     fetchUserData();
   }, [user]);
 
-  return { userData };
+  return { userData, refetchUserData: fetchUserData };
 }
