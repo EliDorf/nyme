@@ -23,6 +23,10 @@ interface DomainFinderProps {
 
 const TLDs = ['.com', '.io', '.ai', '.co', '.net'];
 
+const getAffiliateLink = (domain: string) => {
+  return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}`;
+};
+
 export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: DomainFinderProps) {
   const [domains, setDomains] = useState<Domain[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -175,7 +179,14 @@ export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: D
                                   {availableDomains[index] && (
                                       <div className="flex items-center gap-2">
                                           <GlobeIcon className="w-4 h-4 shrink-0 text-green-500" />
-                                          <span>{availableDomains[index].domain}</span>
+                                          <a
+                                            href={getAffiliateLink(availableDomains[index].domain)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                          >
+                                            {availableDomains[index].domain}
+                                          </a>
                                           <span className="text-xs text-gray-700 dark:text-gray-300">({availableDomains[index].status.status})</span>
                                       </div>
                                   )}
