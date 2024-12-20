@@ -24,7 +24,7 @@ interface DomainFinderProps {
 const TLDs = ['.com', '.io', '.ai', '.co', '.net'];
 
 const getAffiliateLink = (domain: string) => {
-  return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}`;
+  return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}&clickID=2eZ1DcRCpxyKUZtRio1i6XbcUkCXtpSh2w30Ro0&irgwc=1&utm_source=IR&utm_medium=Affiliate&utm_campaign=5673970&affnetwork=ir&ref=ir`;
 };
 
 export function DomainFinder({ inputDomain, suggestions, shouldCheckDomains }: DomainFinderProps) {
