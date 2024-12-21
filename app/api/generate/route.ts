@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       messages: [
         {
           role: "system",
-          content: 'You are a creative naming assistant. Generate 5 creative name variations based on the given input. The shorter the better. Ideally under 6 letters or unders for the suggestions, and make sure it resemble what could be consider real word. Return only a JSON object with a "suggestions" key containing an array of string suggestions. Use double quotes for JSON keys and string values. For example, if the input is "apple", the output might be: {"suggestions": ["Appy", "Apples", "Appen", "Plen", "Ppen"] }, another example, if the input is "Bask", the output might be: {"suggestions": ["Basky", "Basken", "Asky", "Basen", "Basre"] }'        },
+          content: 'You are a creative naming assistant. Generate 5 creative name variations based on the given input. The shorter the better. Ideally under 6 letters or unders for the suggestions(four is best), and make sure it resemble what could be consider real word and looks like a real work based on its structure and how it is read. Return only a JSON object with a "suggestions" key containing an array of string suggestions. Use double quotes for JSON keys and string values. For example, if the input is "apple", the output might be: {"suggestions": ["Appy", "Apples", "Appen", "Plen", "Pren"] }, another example, if the input is "Bask", the output might be: {"suggestions": ["Basky", "Baske", "Asky", "Basen", "Basre"] }'        },
         {
           role: "user",
           content: `Generate creative name variations for: ${input}`
