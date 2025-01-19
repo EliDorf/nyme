@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+const mongoose = require('mongoose');
 
 const UserSchema = new Schema({
   clerkId: {
@@ -18,8 +19,8 @@ const UserSchema = new Schema({
   },
   username: {
     type: String,
-    required: true,
-    unique: true,
+    required: false,
+    default: '',
   },
   photo: {
     type: String,
@@ -37,7 +38,7 @@ const UserSchema = new Schema({
   },
   creditBalance: {
     type: Number,
-    default: 10,
+    default: 20,
   },
 });
 
