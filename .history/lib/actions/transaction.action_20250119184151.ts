@@ -5,7 +5,7 @@ import Stripe from "stripe";
 import { handleError } from '../utils';
 import { connectToDatabase } from '../database/mongoose';
 import Transaction from '../database/models/transaction.model';
-import { updateCredits } from './user.actions';
+import { updateCredits } from './user.action';
 
 export async function checkoutCredits(transaction: CheckoutTransactionParams) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -31,8 +31,8 @@ export async function checkoutCredits(transaction: CheckoutTransactionParams) {
       buyerId: transaction.buyerId,
     },
     mode: 'payment',
-    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
-    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/credits`,
   })
 
   redirect(session.url!)
@@ -42,12 +42,20 @@ export async function createTransaction(transaction: CreateTransactionParams) {
   try {
     await connectToDatabase();
 
-    // Create a new transaction with a buyerId
-    const newTransaction = await Transaction.create({
-      ...transaction, buyer: transaction.buyerId
-    })
+    // First find the user by clerkId to get their MongoDB _id
+    const user = await User.findOne({ clerkId: transaction.buyerId });
+    if (!user) {
+      throw new Error(`User not found with clerkId: ${transaction.buyerId}`);
+    }
 
-    await updateCredits(transaction.buyerId, transaction.credits);
+    // Create a new transaction with the MongoDB _id
+    const newTransaction = await Transaction.create({
+      ...transaction,
+      buyer: user._id
+    });
+
+    // Update credits using the MongoDB _id
+    await updateCredits(user._id.toString(), transaction.credits);
 
     return JSON.parse(JSON.stringify(newTransaction));
   } catch (error) {
