@@ -41,7 +41,7 @@ const Profile = async ({ searchParams }: ProfileProps) => {
       <div className="flex min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
         <NewSidebar />
         <main className="ml-0 p-4 md:ml-64 md:p-8 w-full max-w-7xl mx-auto">
-          <h1 className="text-4xl font-extrabold text-white mb-6 text-center">Profile</h1>
+          <h1 className="text-4xl font-extrabold text-white mb-6">Profile</h1>
 
           <section className="profile flex flex-col gap-6 max-w-lg mx-auto md:max-w-none">
             <div className="profile-balance bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center md:text-left">

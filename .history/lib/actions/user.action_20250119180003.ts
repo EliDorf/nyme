@@ -17,7 +17,7 @@ export async function getAvailableDomainsForUser(userId: string) {
     
     // Flatten all domains from all searches and filter for available ones
     const availableDomains = domainSearches.flatMap(search => 
-      search.domains.filter((domain: { status: string }) => 
+      search.domains.filter(domain => 
         domain.status.includes('undelegated') || 
         domain.status.includes('inactive')
       )
@@ -25,7 +25,7 @@ export async function getAvailableDomainsForUser(userId: string) {
 
     // Remove duplicates based on domain name
     const uniqueDomains = Array.from(
-      new Map(availableDomains.map((domain: { name: string }) => [domain.name, domain])).values()
+      new Map(availableDomains.map(domain => [domain.name, domain])).values()
     );
 
     return uniqueDomains;
