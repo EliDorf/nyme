@@ -108,31 +108,19 @@
 .plan-name {
   font-size: 1.5rem;
   font-weight: bold;
-  color: hsl(var(--primary));
-}
-
-.dark .plan-name {
-  color: rgb(249 250 251);
+  @apply text-primary dark:text-gray-50;
 }
 
 .plan-price {
   font-size: 2rem;
   font-weight: bold;
-  color: hsl(var(--foreground));
+  @apply text-foreground dark:text-blue-400;
   margin: 1rem 0;
-}
-
-.dark .plan-price {
-  color: rgb(96 165 250);
 }
 
 .plan-credits {
   font-size: 1.1rem;
-  color: hsl(var(--muted-foreground));
-}
-
-.dark .plan-credits {
-  color: rgb(229 231 235);
+  @apply text-muted-foreground dark:text-gray-200;
 }
 
 .inclusions-list {
@@ -150,11 +138,7 @@
 
 .inclusion-label {
   font-size: 1rem;
-  color: hsl(var(--muted-foreground));
-}
-
-.dark .inclusion-label {
-  color: rgb(209 213 219);
+  @apply text-muted-foreground dark:text-gray-300;
 }
 
 .credits-item {
@@ -164,11 +148,7 @@
   max-width: 300px;
   text-align: center;
   transition: transform 0.3s;
-  background-color: white;
-}
-
-.dark .credits-item {
-  background-color: rgba(17, 24, 39, 0.6);
+  @apply bg-white dark:bg-gray-900/60;
 }
 
 .credits-btn {

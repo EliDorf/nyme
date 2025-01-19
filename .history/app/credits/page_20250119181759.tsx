@@ -22,12 +22,12 @@ const Credits = async () => {
         <section className="credits-section max-w-6xl mx-auto px-4">
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
             {plans.map((plan) => (
-              <li key={plan.name} className="credits-item bg-white dark:bg-gray-900/60 shadow-md rounded-lg p-6 flex flex-col w-full max-w-md">
+              <li key={plan.name} className="credits-item bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex flex-col w-full max-w-md">
                 <div className="flex flex-col items-center gap-3 mb-4">
                   <Image src={plan.icon} alt="check" width={50} height={50} />
-                  <p className="plan-name text-xl font-bold text-gray-900 dark:text-gray-50">{plan.name}</p>
-                  <p className="plan-price text-2xl font-bold text-primary dark:text-blue-400">${plan.price}</p>
-                  <p className="plan-credits text-lg text-gray-700 dark:text-gray-50">{plan.credits} Credits</p>
+                  <p className="plan-name text-xl font-bold text-gray-900 dark:text-gray-100">{plan.name}</p>
+                  <p className="plan-price text-2xl font-bold text-primary dark:text-primary">${plan.price}</p>
+                  <p className="plan-credits text-lg text-gray-700 dark:text-gray-200">{plan.credits} Credits</p>
                 </div>
 
                 <ul className="inclusions-list space-y-2 mb-4">
@@ -39,7 +39,7 @@ const Credits = async () => {
                         width={24}
                         height={24}
                       />
-                      <p className="inclusion-label text-sm text-gray-700 dark:text-gray-200">{inclusion.label}</p>
+                      <p className="inclusion-label text-sm text-gray-700 dark:text-gray-300">{inclusion.label}</p>
                     </li>
                   ))}
                 </ul>
