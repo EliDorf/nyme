@@ -44,7 +44,7 @@ const Profile = async ({ searchParams }: ProfileProps) => {
           <h1 className="text-4xl font-extrabold text-white mb-6 text-center">Profile</h1>
 
           <section className="profile flex flex-col gap-6 max-w-lg mx-auto md:max-w-none">
-            <div className="profile-balance bg-card text-card-foreground rounded-lg border border-border p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center md:text-left">
+            <div className="profile-balance bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center md:text-left">
               <p className="text-2xl font-semibold text-gray-800 dark:text-white">Credits Available</p>
               <div className="mt-4 flex items-center gap-4">
                 <Image
@@ -60,7 +60,7 @@ const Profile = async ({ searchParams }: ProfileProps) => {
           </section>
 
           <section className="mt-8 md:mt-14 max-w-lg mx-auto md:max-w-none">
-            <div className="bg-card text-card-foreground rounded-lg border border-border p-4 md:p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 md:p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300">
               <div className="flex flex-col md:flex-row justify-between items-center gap-2 mb-4">
                 <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
                   History: Available Domains Found
@@ -73,7 +73,7 @@ const Profile = async ({ searchParams }: ProfileProps) => {
                 {(availableDomains as DomainStatus[]).map((domain, index) => (
                   <div 
                     key={index} 
-                    className="p-4 bg-muted text-muted-foreground rounded-lg border border-border hover:shadow-lg transition-shadow duration-300 text-center md:text-left"
+                    className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300 text-center md:text-left"
                   >
                     <p className="text-lg font-medium text-gray-900 dark:text-white">{domain.name}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Zone: {domain.zone}</p>
