@@ -52,7 +52,6 @@ export default function DomainFinder() {
   const [hasSearched, setHasSearched] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [domainsChecked, setDomainsChecked] = useState(false)
-  const [lastSearchTerm, setLastSearchTerm] = useState("")
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -76,13 +75,12 @@ export default function DomainFinder() {
 
     setIsLoading(true);
     setError(null);
-    setLastSearchTerm(searchTerm);
 
     try {
       await handleSubmit(searchTerm);
       await updateCredits(userData._id.toString(), creditFee);
       await refetchUserData();
-      await checkDomains(searchTerm, false); // Initial search
+      await checkDomains();
     } catch (err) {
       console.error(err);
       setError('Failed to perform search');
@@ -97,57 +95,33 @@ export default function DomainFinder() {
     }
   }, [domainsChecked, user]);
 
-  // Check suggested domains after initial search
-  useEffect(() => {
-    if (hasSearched && suggestions.length > 0 && lastSearchTerm) {
-      // Only check the new suggestions, not the original search term again
-      const existingDomains = new Set(domains.map(d => d.domain.toLowerCase()));
-      const newSuggestions = suggestions.filter(suggestion => 
-        !TLDs.some(tld => existingDomains.has((suggestion + tld).toLowerCase()))
-      );
-      
-      if (newSuggestions.length > 0) {
-        checkDomains(newSuggestions, true);
-      }
-    }
-  }, [suggestions, hasSearched, lastSearchTerm]);
-
-  const checkDomains = async (searchInput: string | string[], checkSuggestions: boolean) => {
+  const checkDomains = async (searchInput = searchTerm) => {
     setIsLoading(true);
     setError(null);
-    
-    if (!checkSuggestions) {
-      setDomains([]); // Only clear domains on initial search
-      setHasSearched(true);
-    }
+    setDomains([]); // Clear existing domains
+    setHasSearched(true); // Set this to true immediately to prevent showing placeholders
     
     try {
-      // Handle both string and array inputs
-      const domainsToCheck = Array.isArray(searchInput) ? searchInput : [searchInput];
-      console.log('Checking domains for:', domainsToCheck);
+      const allDomains = [searchInput, ...suggestions].filter(Boolean);
+      console.log('Checking domains for:', allDomains);
       
-      const domainPromises = domainsToCheck.flatMap(domain =>
+      const domainPromises = allDomains.flatMap(domain =>
         TLDs.map(async (tld): Promise<Domain | null> => {
           const fullDomain = domain + tld;
           try {
             const response = await axios.get(`/api/domains?name=${encodeURIComponent(fullDomain)}`);
-            const apiStatus = response.data.status?.[0];
-            if (!apiStatus || !apiStatus.status) {
-              console.log('Invalid API response for domain:', fullDomain, response.data);
-              return null;
+            const status = response.data.status?.[0];
+            if (!status) {
+              throw new Error('Invalid status response');
             }
-            
-            // Normalize the status response
-            const normalizedStatus = {
-              domain: fullDomain,
-              zone: tld.replace('.', ''),
-              status: apiStatus.status.toLowerCase(),
-              summary: apiStatus.summary || apiStatus.status
-            };
-            
             return {
               domain: fullDomain,
-              status: normalizedStatus
+              status: {
+                domain: fullDomain,
+                zone: tld.replace('.', ''),
+                status: status.status || 'unknown',
+                summary: status.summary || status.status || 'unknown'
+              }
             };
           } catch (error) {
             console.error(`Error checking domain ${fullDomain}:`, error);
@@ -161,19 +135,9 @@ export default function DomainFinder() {
       console.log('Valid domains:', validDomains);
       
       if (validDomains.length > 0) {
-        // Merge new results with existing ones, avoiding duplicates
-        setDomains(prevDomains => {
-          const newDomains = [...prevDomains];
-          validDomains.forEach(domain => {
-            if (!newDomains.some(d => d.domain === domain.domain)) {
-              newDomains.push(domain);
-            }
-          });
-          return newDomains;
-        });
+        setDomains(validDomains);
         setDomainsChecked(true);
-      } else if (!checkSuggestions) {
-        // Only show error for initial search
+      } else {
         setError('No valid domains found');
       }
     } catch (err) {
@@ -185,14 +149,7 @@ export default function DomainFinder() {
   };
 
   const isAvailable = (status: string) => {
-    const lowercaseStatus = status.toLowerCase();
-    return (
-      lowercaseStatus === "inactive" || 
-      lowercaseStatus === "undelegated" || 
-      lowercaseStatus === "unknown" || 
-      lowercaseStatus === "undelegated inactive" ||
-      lowercaseStatus.includes("available")
-    );
+    return status === "inactive" || status === "undelegated" || status === "unknown" || status === "undelegated inactive";
   };
 
   const displayDomains = hasSearched && domains.length > 0 ? domains : (hasSearched ? [] : placeholderDomains);
@@ -231,10 +188,6 @@ export default function DomainFinder() {
     setIsDarkMode(!isDarkMode)
     document.documentElement.classList.toggle('dark')
   }
-
-  const getDisplayStatus = (status: string) => {
-    return isAvailable(status) ? "Available" : status;
-  };
 
   return (
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
@@ -429,7 +382,7 @@ export default function DomainFinder() {
                                     <span className="font-medium">{domain.domain}</span>
                                   </div>
                                   <div className="mt-1 text-sm text-muted-foreground">
-                                    {getDisplayStatus(domain.status.status)}
+                                    {domain.status.status}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -477,7 +430,7 @@ export default function DomainFinder() {
                                 </CardTitle>
                               </div>
                               <CardDescription className="flex items-center gap-2">
-                                Status: {getDisplayStatus(domain.status.status)}
+                                Status: {domain.status.status}
                               </CardDescription>
                             </CardHeader>
                             <CardContent className="p-4">

@@ -2,24 +2,24 @@
 
 import { useState, useEffect } from "react"
 import { Search, CreditCard, Globe, X, Sparkles, ArrowRight, Bell, SlidersHorizontal, DollarSign, ChevronRight } from 'lucide-react'
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../../components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuCheckboxItem } from "../../components/ui/dropdown-menu"
-import { Badge } from "../../components/ui/badge"
-import { ScrollArea } from "../../components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { Skeleton } from "../../components/ui/skeleton"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
-import { Switch } from "../../components/ui/switch"
-import { Label } from "../../components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
-import { creditFee } from "../../constants"
+import { creditFee } from "@/constants"
 import { InsufficientCreditsModal } from "../shared/InsufficientCreditsModal"
 import { useSuggestions } from "./UseSuggestion"
-import { updateCredits } from "../../lib/actions/user.action"
-import { useUserData } from "../../lib/actions/useUserData"
+import { updateCredits } from "@/lib/actions/user.action"
+import { useUserData } from "@/lib/actions/useUserData"
 
 interface DomainStatus {
   domain: string;
@@ -52,7 +52,6 @@ export default function DomainFinder() {
   const [hasSearched, setHasSearched] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [domainsChecked, setDomainsChecked] = useState(false)
-  const [lastSearchTerm, setLastSearchTerm] = useState("")
 
   // Placeholder data
   const placeholderDomains: Domain[] = [
@@ -76,13 +75,12 @@ export default function DomainFinder() {
 
     setIsLoading(true);
     setError(null);
-    setLastSearchTerm(searchTerm);
 
     try {
       await handleSubmit(searchTerm);
       await updateCredits(userData._id.toString(), creditFee);
       await refetchUserData();
-      await checkDomains(searchTerm, false); // Initial search
+      await checkDomains();
     } catch (err) {
       console.error(err);
       setError('Failed to perform search');
@@ -97,85 +95,26 @@ export default function DomainFinder() {
     }
   }, [domainsChecked, user]);
 
-  // Check suggested domains after initial search
-  useEffect(() => {
-    if (hasSearched && suggestions.length > 0 && lastSearchTerm) {
-      // Only check the new suggestions, not the original search term again
-      const existingDomains = new Set(domains.map(d => d.domain.toLowerCase()));
-      const newSuggestions = suggestions.filter(suggestion => 
-        !TLDs.some(tld => existingDomains.has((suggestion + tld).toLowerCase()))
-      );
-      
-      if (newSuggestions.length > 0) {
-        checkDomains(newSuggestions, true);
-      }
-    }
-  }, [suggestions, hasSearched, lastSearchTerm]);
-
-  const checkDomains = async (searchInput: string | string[], checkSuggestions: boolean) => {
+  const checkDomains = async (searchInput = searchTerm) => {
     setIsLoading(true);
     setError(null);
-    
-    if (!checkSuggestions) {
-      setDomains([]); // Only clear domains on initial search
-      setHasSearched(true);
-    }
-    
     try {
-      // Handle both string and array inputs
-      const domainsToCheck = Array.isArray(searchInput) ? searchInput : [searchInput];
-      console.log('Checking domains for:', domainsToCheck);
-      
-      const domainPromises = domainsToCheck.flatMap(domain =>
-        TLDs.map(async (tld): Promise<Domain | null> => {
-          const fullDomain = domain + tld;
-          try {
-            const response = await axios.get(`/api/domains?name=${encodeURIComponent(fullDomain)}`);
-            const apiStatus = response.data.status?.[0];
-            if (!apiStatus || !apiStatus.status) {
-              console.log('Invalid API response for domain:', fullDomain, response.data);
-              return null;
-            }
-            
-            // Normalize the status response
-            const normalizedStatus = {
-              domain: fullDomain,
-              zone: tld.replace('.', ''),
-              status: apiStatus.status.toLowerCase(),
-              summary: apiStatus.summary || apiStatus.status
-            };
-            
-            return {
-              domain: fullDomain,
-              status: normalizedStatus
-            };
-          } catch (error) {
-            console.error(`Error checking domain ${fullDomain}:`, error);
-            return null;
-          }
-        })
+      const allDomains = [searchInput, ...suggestions].filter(Boolean);
+      const requests = allDomains.flatMap(domain =>
+        TLDs.map(tld => axios.get(`/api/domains?name=${encodeURIComponent(domain + tld)}`))
       );
-      
-      const results = await Promise.all(domainPromises);
-      const validDomains = results.filter((domain): domain is Domain => domain !== null);
-      console.log('Valid domains:', validDomains);
-      
-      if (validDomains.length > 0) {
-        // Merge new results with existing ones, avoiding duplicates
-        setDomains(prevDomains => {
-          const newDomains = [...prevDomains];
-          validDomains.forEach(domain => {
-            if (!newDomains.some(d => d.domain === domain.domain)) {
-              newDomains.push(domain);
-            }
-          });
-          return newDomains;
-        });
-        setDomainsChecked(true);
-      } else if (!checkSuggestions) {
-        // Only show error for initial search
-        setError('No valid domains found');
-      }
+      const responses = await Promise.all(requests);
+      const newDomains = responses.map((response, index) => {
+        const domain = allDomains[Math.floor(index / TLDs.length)] + TLDs[index % TLDs.length];
+        const status = response.data.status[0];
+        return {
+          domain,
+          status
+        };
+      });
+      setDomains(newDomains);
+      setHasSearched(true);
+      setDomainsChecked(true);
     } catch (err) {
       setError('Failed to check domain availability');
       console.error(err);
@@ -185,17 +124,10 @@ export default function DomainFinder() {
   };
 
   const isAvailable = (status: string) => {
-    const lowercaseStatus = status.toLowerCase();
-    return (
-      lowercaseStatus === "inactive" || 
-      lowercaseStatus === "undelegated" || 
-      lowercaseStatus === "unknown" || 
-      lowercaseStatus === "undelegated inactive" ||
-      lowercaseStatus.includes("available")
-    );
+    return status === "inactive" || status === "undelegated" || status === "unknown" || status === "undelegated inactive";
   };
 
-  const displayDomains = hasSearched && domains.length > 0 ? domains : (hasSearched ? [] : placeholderDomains);
+  const displayDomains = domains.length > 0 ? domains : placeholderDomains;
   const sortedDomains = [...displayDomains].sort((a, b) => a.domain.length - b.domain.length);
   const availableDomains = sortedDomains.filter(d => isAvailable(d.status.status)).slice(0, 10);
   const unavailableDomains = sortedDomains.filter(d => !isAvailable(d.status.status)).slice(0, 10);
@@ -231,10 +163,6 @@ export default function DomainFinder() {
     setIsDarkMode(!isDarkMode)
     document.documentElement.classList.toggle('dark')
   }
-
-  const getDisplayStatus = (status: string) => {
-    return isAvailable(status) ? "Available" : status;
-  };
 
   return (
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
@@ -429,7 +357,7 @@ export default function DomainFinder() {
                                     <span className="font-medium">{domain.domain}</span>
                                   </div>
                                   <div className="mt-1 text-sm text-muted-foreground">
-                                    {getDisplayStatus(domain.status.status)}
+                                    {domain.status.status}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -477,7 +405,7 @@ export default function DomainFinder() {
                                 </CardTitle>
                               </div>
                               <CardDescription className="flex items-center gap-2">
-                                Status: {getDisplayStatus(domain.status.status)}
+                                Status: {domain.status.status}
                               </CardDescription>
                             </CardHeader>
                             <CardContent className="p-4">

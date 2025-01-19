@@ -100,19 +100,11 @@ export default function DomainFinder() {
   // Check suggested domains after initial search
   useEffect(() => {
     if (hasSearched && suggestions.length > 0 && lastSearchTerm) {
-      // Only check the new suggestions, not the original search term again
-      const existingDomains = new Set(domains.map(d => d.domain.toLowerCase()));
-      const newSuggestions = suggestions.filter(suggestion => 
-        !TLDs.some(tld => existingDomains.has((suggestion + tld).toLowerCase()))
-      );
-      
-      if (newSuggestions.length > 0) {
-        checkDomains(newSuggestions, true);
-      }
+      checkDomains(lastSearchTerm, true); // Check suggestions
     }
   }, [suggestions, hasSearched, lastSearchTerm]);
 
-  const checkDomains = async (searchInput: string | string[], checkSuggestions: boolean) => {
+  const checkDomains = async (searchInput: string, checkSuggestions: boolean) => {
     setIsLoading(true);
     setError(null);
     
@@ -122,8 +114,9 @@ export default function DomainFinder() {
     }
     
     try {
-      // Handle both string and array inputs
-      const domainsToCheck = Array.isArray(searchInput) ? searchInput : [searchInput];
+      // For initial search, only check the search term
+      // For suggestion updates, only check the suggestions
+      const domainsToCheck = checkSuggestions ? suggestions : [searchInput];
       console.log('Checking domains for:', domainsToCheck);
       
       const domainPromises = domainsToCheck.flatMap(domain =>
@@ -231,10 +224,6 @@ export default function DomainFinder() {
     setIsDarkMode(!isDarkMode)
     document.documentElement.classList.toggle('dark')
   }
-
-  const getDisplayStatus = (status: string) => {
-    return isAvailable(status) ? "Available" : status;
-  };
 
   return (
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
@@ -429,7 +418,7 @@ export default function DomainFinder() {
                                     <span className="font-medium">{domain.domain}</span>
                                   </div>
                                   <div className="mt-1 text-sm text-muted-foreground">
-                                    {getDisplayStatus(domain.status.status)}
+                                    {domain.status.status}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -477,7 +466,7 @@ export default function DomainFinder() {
                                 </CardTitle>
                               </div>
                               <CardDescription className="flex items-center gap-2">
-                                Status: {getDisplayStatus(domain.status.status)}
+                                Status: {domain.status.status}
                               </CardDescription>
                             </CardHeader>
                             <CardContent className="p-4">

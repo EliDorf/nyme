@@ -5,8 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs"
-import { Home, User, CreditCard, Moon, Sun } from "lucide-react"
-import Image from "next/image"
+import { Home, History, CreditCard, Moon, Sun } from "lucide-react"
 
 export function NewSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -30,10 +29,10 @@ export function NewSidebar() {
           Dashboard
         </Button>
       </Link>
-      <Link href="/profile" prefetch={false}>
+      <Link href="/history" prefetch={false}>
         <Button variant="ghost" className="w-full justify-start">
-          <User className="mr-2 h-4 w-4" />
-          Profile
+          <History className="mr-2 h-4 w-4" />
+          Search History
         </Button>
       </Link>
       <Link href="/credits" prefetch={false}>
@@ -62,10 +61,10 @@ export function NewSidebar() {
       </div>
 
       {/* Mobile sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
+      <div className={`fixed inset-y-0 left-0 z-10 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
         <div className="flex h-14 items-center justify-between px-4 border-b">
           <Link href="/" className="flex items-center gap-2 font-semibold" prefetch={false}>
-            <Image src="/output.svg" alt="Nyme.AI Logo" width={20} height={20} />
+            <MountainIcon className="h-5 w-5" />
             <span>Nyme.AI</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -86,7 +85,7 @@ export function NewSidebar() {
       <div className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col bg-background border-r border-muted md:flex">
         <div className="flex h-14 items-center justify-between border-b px-4">
           <Link href="/" className="flex items-center gap-2 font-semibold" prefetch={false}>
-            <Image src="/output.svg" alt="Nyme.AI Logo" width={24} height={24} />
+            <MountainIcon className="h-6 w-6" />
             <span>Nyme.AI</span>
           </Link>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
@@ -98,6 +97,25 @@ export function NewSidebar() {
         </div>
       </div>
     </>
+  )
+}
+
+function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+    </svg>
   )
 }
 

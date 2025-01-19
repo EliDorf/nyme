@@ -232,10 +232,6 @@ export default function DomainFinder() {
     document.documentElement.classList.toggle('dark')
   }
 
-  const getDisplayStatus = (status: string) => {
-    return isAvailable(status) ? "Available" : status;
-  };
-
   return (
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
       <div className="flex-1">
@@ -429,7 +425,7 @@ export default function DomainFinder() {
                                     <span className="font-medium">{domain.domain}</span>
                                   </div>
                                   <div className="mt-1 text-sm text-muted-foreground">
-                                    {getDisplayStatus(domain.status.status)}
+                                    {domain.status.status}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-4">
@@ -477,7 +473,7 @@ export default function DomainFinder() {
                                 </CardTitle>
                               </div>
                               <CardDescription className="flex items-center gap-2">
-                                Status: {getDisplayStatus(domain.status.status)}
+                                Status: {domain.status.status}
                               </CardDescription>
                             </CardHeader>
                             <CardContent className="p-4">
