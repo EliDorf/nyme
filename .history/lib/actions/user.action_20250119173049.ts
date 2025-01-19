@@ -29,24 +29,16 @@ export async function createUser(user: CreateUserParams) {
   try {
     await connectToDatabase();
 
-    console.log('Creating new user with data:', user);
     const newUser = await User.create(user);
 
-    if (!newUser) {
-      console.error('Failed to create user:', user);
-      throw new Error('Failed to create user');
-    }
-
-    console.log('Successfully created user:', newUser);
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    console.error('Error in createUser:', error);
-    throw error; // Let the webhook handler handle the error
+    handleError(error);
   }
 }
 
 // READ
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs";
 
 export async function getUserById(userId: string) {
   try {

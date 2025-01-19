@@ -383,18 +383,18 @@ export default function DomainFinder() {
               <Tabs defaultValue="available" className="space-y-4">
                 <div className="flex items-center justify-between">
                   <TabsList className="w-auto justify-start">
-                    <TabsTrigger value="available" className="bg-green-100/80 px-4 py-2">
+                    <TabsTrigger value="available" className="bg-green-100">
                       <div className="flex items-center gap-2">
-                        <span className="text-green-700">Available</span>
-                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
+                        <span>Available</span>
+                        <Badge variant="secondary" className="ml-2 bg-white/50">
                           {availableDomains.length}
                         </Badge>
                       </div>
                     </TabsTrigger>
-                    <TabsTrigger value="unavailable" className="bg-red-100/80 px-4 py-2">
+                    <TabsTrigger value="unavailable" className="bg-red-100">
                       <div className="flex items-center gap-2">
-                        <span className="text-red-700">Unavailable</span>
-                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
+                        <span>Unavailable</span>
+                        <Badge variant="secondary" className="ml-2 bg-white/50">
                           {unavailableDomains.length}
                         </Badge>
                       </div>

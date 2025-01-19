@@ -89,30 +89,18 @@ async function handleUserCreated(data: WebhookEvent['data']) {
     photo: image_url ?? '',
   };
 
-  try {
-    console.log("👤 Creating user:", user);
-    const newUser = await createUser(user);
+  console.log("👤 Creating user:", user);
+  const newUser = await createUser(user);
 
-    if (!newUser) {
-      console.error('Failed to create user in database');
-      return new Response('Error creating user in database', { status: 500 });
-    }
-
-    console.log('Created user in database:', newUser);
-
-    // Store the MongoDB _id in Clerk metadata
+  if (newUser) {
     await clerkClient.users.updateUserMetadata(id, {
       publicMetadata: {
-        userId: newUser._id.toString(), // Ensure _id is converted to string
+        userId: newUser._id,
       },
     });
-
-    console.log('Updated Clerk metadata with MongoDB ID');
-    return NextResponse.json({ message: "OK", user: newUser });
-  } catch (error) {
-    console.error('Error in handleUserCreated:', error);
-    return new Response('Error creating user', { status: 500 });
   }
+
+  return NextResponse.json({ message: "OK", user: newUser });
 }
 
 async function handleUserUpdated(data: WebhookEvent['data']) {

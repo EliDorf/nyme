@@ -240,7 +240,7 @@ export default function DomainFinder() {
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
       <div className="flex-1">
         <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="flex h-12 items-center gap-2 px-3">
+          <div className="flex h-14 items-center gap-4 px-4">
             <h1 className="text-lg font-semibold md:text-xl">Find Your Perfect Domain</h1>
             <div className="ml-auto flex items-center gap-2">
               <TooltipProvider>
@@ -258,12 +258,12 @@ export default function DomainFinder() {
           </div>
         </header>
 
-        <main className="p-2 md:p-3">
-          <div className="mx-auto max-w-full space-y-2 md:space-y-4">
+        <main className="p-2 md:p-4">
+          <div className="mx-auto max-w-6xl space-y-2 md:space-y-4">
             {/* Search Section */}
             <Card className="overflow-hidden">
               <CardContent className="p-3 md:p-4">
-                <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -328,8 +328,8 @@ export default function DomainFinder() {
             {/* Error Display */}
             {error && (
               <Card className="border-red-200 bg-red-50">
-                <CardContent className="p-2">
-                  <div className="flex items-center gap-1 text-red-600">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 text-red-600">
                     <X className="h-4 w-4" />
                     <p>{error}</p>
                   </div>
@@ -340,8 +340,8 @@ export default function DomainFinder() {
             {/* AI-Powered Suggestions */}
             {suggestions.length > 0 && (
               <Card className="overflow-hidden">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center text-base">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
                     <Sparkles className="mr-2 h-5 w-5 text-primary" />
                     AI-Powered Suggestions
                   </CardTitle>
@@ -356,7 +356,7 @@ export default function DomainFinder() {
                         <Button
                           key={suggestion}
                           variant="outline"
-                          className="h-auto w-[200px] shrink-0 justify-start p-4 transition-all hover:shadow-md md:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)]"
+                          className="h-auto w-[200px] shrink-0 justify-start p-4 transition-all hover:shadow-md md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
                           onClick={() => {
                             setSearchTerm(suggestion);
                             handleSearch();
@@ -383,21 +383,17 @@ export default function DomainFinder() {
               <Tabs defaultValue="available" className="space-y-4">
                 <div className="flex items-center justify-between">
                   <TabsList className="w-auto justify-start">
-                    <TabsTrigger value="available" className="bg-green-100/80 px-4 py-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-700">Available</span>
-                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
-                          {availableDomains.length}
-                        </Badge>
-                      </div>
+                    <TabsTrigger value="available" className="text-green-600 data-[state=active]:bg-green-100 dark:text-green-400 dark:data-[state=active]:bg-green-900/20">
+                      Available
+                      <Badge variant="secondary" className="ml-2 hidden sm:inline-flex bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                        {availableDomains.length}
+                      </Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="unavailable" className="bg-red-100/80 px-4 py-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-red-700">Unavailable</span>
-                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
-                          {unavailableDomains.length}
-                        </Badge>
-                      </div>
+                    <TabsTrigger value="unavailable" className="text-red-600 data-[state=active]:bg-red-100 dark:text-red-400 dark:data-[state=active]:bg-red-900/20">
+                      Unavailable
+                      <Badge variant="secondary" className="ml-2 hidden sm:inline-flex bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                        {unavailableDomains.length}
+                      </Badge>
                     </TabsTrigger>
                   </TabsList>
                   <div className="flex items-center space-x-2">
@@ -417,7 +413,7 @@ export default function DomainFinder() {
                         <div className="divide-y">
                           {isLoading ? (
                             Array(3).fill(0).map((_, i) => (
-                              <div key={i} className="p-2">
+                              <div key={i} className="p-4">
                                 <div className="flex items-center justify-between">
                                   <Skeleton className="h-6 w-1/3" />
                                   <Skeleton className="h-6 w-16" />
@@ -427,7 +423,7 @@ export default function DomainFinder() {
                             ))
                           ) : (
                             availableDomains.map((domain) => (
-                              <div key={domain.domain} className="flex items-center justify-between p-2 hover:bg-muted/50">
+                              <div key={domain.domain} className="flex items-center justify-between p-4 hover:bg-muted/50">
                                 <div>
                                   <div className="flex items-center gap-2">
                                     <span className="font-medium">{domain.domain}</span>
@@ -452,21 +448,21 @@ export default function DomainFinder() {
                       </CardContent>
                     </Card>
                   ) : (
-                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       {isLoading ? (
                         Array(3).fill(0).map((_, i) => (
                           <Card key={i} className="overflow-hidden">
-                            <CardHeader className="space-y-1 p-2">
+                            <CardHeader className="space-y-2 p-4">
                               <Skeleton className="h-4 w-1/2" />
                               <Skeleton className="h-4 w-1/4" />
                             </CardHeader>
-                            <CardContent className="p-2">
-                              <div className="space-y-1">
+                            <CardContent className="p-4">
+                              <div className="space-y-2">
                                 <Skeleton className="h-4 w-full" />
                                 <Skeleton className="h-4 w-3/4" />
                               </div>
                             </CardContent>
-                            <CardFooter className="p-2 pt-0">
+                            <CardFooter className="p-4 pt-0">
                               <Skeleton className="h-10 w-full" />
                             </CardFooter>
                           </Card>
@@ -485,8 +481,8 @@ export default function DomainFinder() {
                               </CardDescription>
                             </CardHeader>
                             <CardContent className="p-3">
-                              <div className="space-y-2">
-                                <div className="grid grid-cols-2 gap-1 text-sm">
+                              <div className="space-y-3">
+                                <div className="grid grid-cols-2 gap-2 text-sm">
                                   <div className="space-y-1">
                                     <p className="text-muted-foreground">Zone</p>
                                     <p>{domain.status.zone}</p>
@@ -528,7 +524,7 @@ export default function DomainFinder() {
                           {unavailableDomains.map((domain) => (
                             <div
                               key={domain.domain}
-                              className="flex items-center justify-between rounded-lg border p-2 transition-colors hover:bg-muted/50"
+                              className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
                             >
                               <div className="flex items-center gap-2">
                                 <Globe className="h-4 w-4 text-muted-foreground" />

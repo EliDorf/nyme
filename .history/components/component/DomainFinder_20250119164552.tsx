@@ -258,12 +258,12 @@ export default function DomainFinder() {
           </div>
         </header>
 
-        <main className="p-2 md:p-3">
-          <div className="mx-auto max-w-full space-y-2 md:space-y-4">
+        <main className="p-2 md:p-4">
+          <div className="mx-auto max-w-6xl space-y-2 md:space-y-4">
             {/* Search Section */}
             <Card className="overflow-hidden">
               <CardContent className="p-3 md:p-4">
-                <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -356,7 +356,7 @@ export default function DomainFinder() {
                         <Button
                           key={suggestion}
                           variant="outline"
-                          className="h-auto w-[200px] shrink-0 justify-start p-4 transition-all hover:shadow-md md:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)]"
+                          className="h-auto w-[200px] shrink-0 justify-start p-4 transition-all hover:shadow-md md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
                           onClick={() => {
                             setSearchTerm(suggestion);
                             handleSearch();
@@ -383,21 +383,17 @@ export default function DomainFinder() {
               <Tabs defaultValue="available" className="space-y-4">
                 <div className="flex items-center justify-between">
                   <TabsList className="w-auto justify-start">
-                    <TabsTrigger value="available" className="bg-green-100/80 px-4 py-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-700">Available</span>
-                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
-                          {availableDomains.length}
-                        </Badge>
-                      </div>
+                    <TabsTrigger value="available" className="text-green-600 data-[state=active]:bg-green-100 dark:text-green-400 dark:data-[state=active]:bg-green-900/20">
+                      Available
+                      <Badge variant="secondary" className="ml-2 hidden sm:inline-flex bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                        {availableDomains.length}
+                      </Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="unavailable" className="bg-red-100/80 px-4 py-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-red-700">Unavailable</span>
-                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
-                          {unavailableDomains.length}
-                        </Badge>
-                      </div>
+                    <TabsTrigger value="unavailable" className="text-red-600 data-[state=active]:bg-red-100 dark:text-red-400 dark:data-[state=active]:bg-red-900/20">
+                      Unavailable
+                      <Badge variant="secondary" className="ml-2 hidden sm:inline-flex bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                        {unavailableDomains.length}
+                      </Badge>
                     </TabsTrigger>
                   </TabsList>
                   <div className="flex items-center space-x-2">
@@ -452,21 +448,21 @@ export default function DomainFinder() {
                       </CardContent>
                     </Card>
                   ) : (
-                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       {isLoading ? (
                         Array(3).fill(0).map((_, i) => (
                           <Card key={i} className="overflow-hidden">
-                            <CardHeader className="space-y-1 p-2">
+                            <CardHeader className="space-y-2 p-4">
                               <Skeleton className="h-4 w-1/2" />
                               <Skeleton className="h-4 w-1/4" />
                             </CardHeader>
-                            <CardContent className="p-2">
-                              <div className="space-y-1">
+                            <CardContent className="p-4">
+                              <div className="space-y-2">
                                 <Skeleton className="h-4 w-full" />
                                 <Skeleton className="h-4 w-3/4" />
                               </div>
                             </CardContent>
-                            <CardFooter className="p-2 pt-0">
+                            <CardFooter className="p-4 pt-0">
                               <Skeleton className="h-10 w-full" />
                             </CardFooter>
                           </Card>
@@ -485,8 +481,8 @@ export default function DomainFinder() {
                               </CardDescription>
                             </CardHeader>
                             <CardContent className="p-3">
-                              <div className="space-y-2">
-                                <div className="grid grid-cols-2 gap-1 text-sm">
+                              <div className="space-y-3">
+                                <div className="grid grid-cols-2 gap-2 text-sm">
                                   <div className="space-y-1">
                                     <p className="text-muted-foreground">Zone</p>
                                     <p>{domain.status.zone}</p>

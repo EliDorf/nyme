@@ -18,14 +18,12 @@ const Profile = async ({ searchParams }: ProfileProps) => {
 
     if (!userId) redirect("/sign-in");
 
-    console.log('Attempting to fetch user with Clerk userId:', userId);
     const user = await getUserById(userId);
     
     if (!user) {
-      console.error('User not found for Clerk userId:', userId);
+      console.error('User not found for ID:', userId);
       throw new Error('User not found');
     }
-    console.log('Successfully found user:', user);
 
     return (
       <div className="flex min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
@@ -72,11 +70,10 @@ const Profile = async ({ searchParams }: ProfileProps) => {
   } catch (error) {
     console.error('Profile page error:', error);
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
-        <div className="bg-white p-8 rounded-lg shadow-xl">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Error loading profile</h1>
-          <p className="text-gray-600 mb-4">There was an issue loading your profile data.</p>
-          <p className="text-sm text-gray-500">Please try signing out and signing back in.</p>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600">Error loading profile</h1>
+          <p className="mt-2 text-gray-600">Please try refreshing the page</p>
         </div>
       </div>
     );

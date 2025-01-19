@@ -29,54 +29,37 @@ export async function createUser(user: CreateUserParams) {
   try {
     await connectToDatabase();
 
-    console.log('Creating new user with data:', user);
     const newUser = await User.create(user);
 
-    if (!newUser) {
-      console.error('Failed to create user:', user);
-      throw new Error('Failed to create user');
-    }
-
-    console.log('Successfully created user:', newUser);
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    console.error('Error in createUser:', error);
-    throw error; // Let the webhook handler handle the error
+    handleError(error);
   }
 }
 
 // READ
-import { clerkClient } from "@clerk/nextjs/server";
-
 export async function getUserById(userId: string) {
   try {
     await connectToDatabase();
 
-    console.log('Getting user with Clerk ID:', userId);
+    console.log('Searching for user with clerkId:', userId);
     
-    // Try both ways to find the user
-    let user = await User.findOne({ clerkId: userId });
-    
-    if (!user) {
-      // If not found by clerkId, try getting the MongoDB _id from Clerk metadata
-      const clerkUser = await clerkClient.users.getUser(userId);
-      const mongoDbId = clerkUser.publicMetadata.userId;
-      
-      if (mongoDbId) {
-        console.log('Found MongoDB ID in Clerk metadata:', mongoDbId);
-        user = await User.findById(mongoDbId);
-      }
-    }
+    // First try to find all users to see what's in the database
+    const allUsers = await User.find({});
+    console.log('All users in database:', allUsers);
+
+    const user = await User.findOne({ clerkId: userId });
+    console.log('Query result:', user);
 
     if (!user) {
-      console.error('User not found for ID:', userId);
+      console.error('User not found for clerkId:', userId);
       throw new Error("User not found");
     }
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     console.error('Error getting user:', error);
-    throw error;
+    throw error; // Let the caller handle the error
   }
 }
 
