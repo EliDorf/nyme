@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
-import { creditFee } from '../../constants'
+import { creditFee } from "'constants"'
 import { 
   trackDomainSearchError,
   trackAiFeedback,
   trackCreditUsed
-} from '../../lib/analytics/dataLayer'
+} from "'lib/analytics/dataLayer"'
 
 const PLACEHOLDER_SUGGESTIONS = [
   "Names",

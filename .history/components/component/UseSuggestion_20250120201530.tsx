@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
-import { creditFee } from '../../constants'
+import { creditFee } from "@/constants"
 import { 
   trackDomainSearchError,
-  trackAiFeedback,
-  trackCreditUsed
-} from '../../lib/analytics/dataLayer'
+  trackAiFeedback 
+} from "@/lib/analytics/dataLayer"
 
 const PLACEHOLDER_SUGGESTIONS = [
   "Names",
@@ -47,8 +46,7 @@ export function useSuggestions() {
       const newSuggestions = Array.isArray(data.suggestions) ? data.suggestions : PLACEHOLDER_SUGGESTIONS
       setSuggestions(newSuggestions)
 
-      // Track credit usage and successful AI suggestions
-      trackCreditUsed('name_suggestion', creditFee)
+      // Track successful AI suggestions
       trackAiFeedback(input, 'thumbs_up', 'Suggestions generated successfully')
     } catch (error) {
       console.error('Error:', error)

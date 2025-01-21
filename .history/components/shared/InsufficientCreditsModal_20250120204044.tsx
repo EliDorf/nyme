@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { trackCreditsExhausted } from "lib/analytics/dataLayer";
+import { trackCreditsExhausted } from "@/lib/analytics/dataLayer";
 import { useAuth } from "@clerk/nextjs";
 
 import {
@@ -15,7 +15,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 export interface InsufficientCreditsModalProps {

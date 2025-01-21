@@ -2,7 +2,6 @@ import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import PageViewTracker from "@/components/analytics/PageViewTracker";
 import { getUserById, getAvailableDomainsForUser } from "../../lib/actions/user.action";
 import { NewSidebar } from "../../components/shared/new-sidebar";
 
@@ -40,7 +39,6 @@ const Profile = async ({ searchParams }: ProfileProps) => {
 
     return (
       <div className="flex min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 dark:from-purple-900 dark:via-pink-800 dark:to-red-900">
-        <PageViewTracker path="/profile" />
         <NewSidebar />
         <main className="ml-0 p-4 md:ml-64 md:p-8 w-full max-w-7xl mx-auto">
           <h1 className="text-4xl font-extrabold text-white mb-6 text-center">Profile</h1>

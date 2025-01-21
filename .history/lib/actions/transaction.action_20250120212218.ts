@@ -32,7 +32,7 @@ export async function checkoutCredits(transaction: CheckoutTransactionParams) {
       buyerId: transaction.buyerId,
     },
     mode: 'payment',
-    success_url: `https://app.nyme.ai?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${transaction.plan}&amount=${amount}`,
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${transaction.plan}&amount=${amount}`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/credits?canceled=true`,
   });
 

@@ -8,7 +8,7 @@ import {
   trackDomainSearchError,
   trackDomainSuggestionClicked,
   trackAddToCart
-} from "lib/analytics/dataLayer"
+} from "@/lib/analytics/dataLayer"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../../components/ui/card"
@@ -82,6 +82,7 @@ export default function DomainFinder() {
       const errorMsg = 'Insufficient credits';
       setError(errorMsg);
       trackDomainSearchError('CREDITS_ERROR', errorMsg);
+      trackCreditsExhausted('domain_search', user.id);
       return;
     }
 

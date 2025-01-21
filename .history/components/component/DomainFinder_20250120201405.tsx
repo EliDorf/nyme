@@ -8,7 +8,7 @@ import {
   trackDomainSearchError,
   trackDomainSuggestionClicked,
   trackAddToCart
-} from "lib/analytics/dataLayer"
+} from "@/lib/analytics/dataLayer"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../../components/ui/card"
@@ -592,7 +592,7 @@ export default function DomainFinder() {
               </Tabs>
             </div>
 
-            {userData && userData.creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal featureName="domain_search" />}
+            {userData && userData.creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
           </div>
         </main>
       </div>

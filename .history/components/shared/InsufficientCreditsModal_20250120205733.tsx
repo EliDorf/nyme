@@ -2,10 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { trackCreditsExhausted } from "lib/analytics/dataLayer";
-import { useAuth } from "@clerk/nextjs";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +11,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 export interface InsufficientCreditsModalProps {
@@ -24,13 +20,6 @@ export interface InsufficientCreditsModalProps {
 
 export const InsufficientCreditsModal = ({ featureName }: InsufficientCreditsModalProps) => {
   const router = useRouter();
-  const { userId } = useAuth();
-
-  useEffect(() => {
-    if (userId) {
-      trackCreditsExhausted(featureName, userId);
-    }
-  }, [featureName, userId]);
 
   return (
     <AlertDialog defaultOpen>

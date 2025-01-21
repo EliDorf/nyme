@@ -2,10 +2,12 @@
 
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect } from "react";
+
+import { useToast } from "@/components/ui/use-toast";
+import { checkoutCredits } from "@/lib/actions/transaction.action";
+import { trackCreditAddToCart } from "@/lib/analytics/dataLayer";
+
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
-import { checkoutCredits } from "../../lib/actions/transaction.action";
-import { trackCreditAddToCart, trackPurchaseComplete } from "../../lib/analytics/dataLayer";
 
 const Checkout = ({
   plan,
@@ -28,24 +30,6 @@ const Checkout = ({
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
-      const sessionId = query.get("session_id");
-      const purchasePlan = query.get("plan");
-      const purchaseAmount = query.get("amount");
-      
-      // Track purchase complete
-      if (sessionId && purchasePlan && purchaseAmount) {
-        const amount = Number(purchaseAmount) / 100; // Convert back from cents
-        trackPurchaseComplete(
-          sessionId,
-          [{
-            domainName: purchasePlan,
-            price: amount
-          }],
-          amount,
-          'USD'
-        );
-      }
-      
       toast({
         title: "Order placed!",
         description: "You will receive an email confirmation",

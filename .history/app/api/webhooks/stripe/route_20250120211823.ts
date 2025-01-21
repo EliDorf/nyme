@@ -36,18 +36,16 @@ export async function POST(request: Request) {
 
     const newTransaction = await createTransaction(transaction);
 
-    // Track purchase complete event in client-side
-    if (typeof window !== "undefined") {
-      trackPurchaseComplete(
-        id,
-        [{
-          domainName: metadata?.plan || "Credit Purchase",
-          price: amount_total ? amount_total / 100 : 0
-        }],
-        amount_total ? amount_total / 100 : 0,
-        'USD'
-      );
-    }
+    // Track purchase complete event
+    trackPurchaseComplete(
+      id,
+      [{
+        domainName: metadata?.plan || "Credit Purchase",
+        price: amount_total ? amount_total / 100 : 0
+      }],
+      amount_total ? amount_total / 100 : 0,
+      'USD'
+    );
     
     return NextResponse.json({ message: "OK", transaction: newTransaction });
   }
