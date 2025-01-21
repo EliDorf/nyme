@@ -44,25 +44,26 @@ export const navLinks = [
   export const plans = [
     {
       _id: 1,
-      name: "Free",
+      name: "Starter Package",
       icon: "/assets/icons/free-plan.svg",
-      price: 0,
-      credits: 10,
+      price: 0.99,
+      credits: 50,
+      stripePriceID: "price_1PhNFvFJUXTjfaQFrkc4Rs4M",
       inclusions: [
         {
-          label: "10 Free Credits",
+          label: "50 Credits one-time purchase",
           isIncluded: true,
         },
         {
-          label: "Basic Access to Services",
+          label: "20 Free Credits upon sign up",
           isIncluded: true,
         },
         {
-          label: "Customer Support",
+          label: "Basic Customer Support",
           isIncluded: false,
         },
         {
-          label: "Priority Updates",
+          label: "Measly Updates",
           isIncluded: false,
         },
       ],
@@ -71,11 +72,12 @@ export const navLinks = [
       _id: 2,
       name: "Pro Package",
       icon: "/assets/icons/free-plan.svg",
-      price: 7.9,
-      credits: 200,
+      price: 1.99,
+      credits: 100,
+      stripePriceID: "price_1PhNFvFJUXTjfaQFrkc4Rs4M",
       inclusions: [
         {
-          label: "200 Credits a month",
+          label: "100 Credits a month",
           isIncluded: true,
         },
         {
@@ -97,10 +99,11 @@ export const navLinks = [
       name: "Premium Package",
       icon: "/assets/icons/free-plan.svg",
       price: 14.99,
-      credits: 2000,
+      credits: 2500,
+      stripePriceID: "price_1PhNJ6FJUXTjfaQF65eA0A8a",
       inclusions: [
         {
-          label: "2000 Credits",
+          label: "2500 Credits a month",
           isIncluded: true,
         },
         {

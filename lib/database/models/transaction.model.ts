@@ -24,6 +24,19 @@ const TransactionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  subscriptionId: {
+    type: String,
+    sparse: true,
+  },
+  isSubscription: {
+    type: Boolean,
+    default: false
+  },
+  subscriptionStatus: {
+    type: String,
+    enum: ['active', 'canceled', 'past_due', null],
+    default: null
+  }
 });
 
 const Transaction = models?.Transaction || model("Transaction", TransactionSchema);

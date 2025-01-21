@@ -14,40 +14,32 @@ export async function checkoutCredits(transaction: CheckoutTransactionParams) {
   const amount = Number(transaction.amount) * 100;
 
   // Get or create the product
-  const products = await stripe.products.search({
-    query: `active:\'true\' AND name:\'${transaction.plan}\'`
-  });
-  let product = products.data[0];
+  let product = await stripe.products.list({
+    active: true,
+    name: transaction.plan
+  }).then(res => res.data[0]);
 
   if (!product) {
     product = await stripe.products.create({
       name: transaction.plan,
-      description: transaction.plan === "Starter Package" 
-        ? `One-time purchase of ${transaction.credits} credits`
-        : `Monthly subscription for ${transaction.credits} credits`
+      description: `Monthly subscription for ${transaction.credits} credits`
     });
   }
 
-  // Get or create the price based on plan type
-  const isStarterPackage = transaction.plan === "Starter Package";
-  const prices = await stripe.prices.search({
-    query: `active:\'true\' AND product:\'${product.id}\' AND type:\'${isStarterPackage ? 'one_time' : 'recurring'}\'`
-  });
-  let price = prices.data[0];
+  // Get or create the price
+  let price = await stripe.prices.list({
+    product: product.id,
+    active: true,
+    recurring: { interval: 'month' }
+  }).then(res => res.data[0]);
 
   if (!price) {
-    const priceData: Stripe.PriceCreateParams = {
+    price = await stripe.prices.create({
       product: product.id,
       currency: 'usd',
       unit_amount: amount,
-    };
-
-    // Add recurring config only for non-starter packages
-    if (!isStarterPackage) {
-      priceData.recurring = { interval: 'month' };
-    }
-
-    price = await stripe.prices.create(priceData);
+      recurring: { interval: 'month' }
+    });
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -62,7 +54,7 @@ export async function checkoutCredits(transaction: CheckoutTransactionParams) {
       credits: transaction.credits,
       buyerId: transaction.buyerId,
     },
-    mode: isStarterPackage ? 'payment' : 'subscription',
+    mode: 'subscription',
     success_url: `https://app.nyme.ai?success=true&session_id={CHECKOUT_SESSION_ID}&plan=${transaction.plan}&amount=${amount}`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/credits?canceled=true`,
   });

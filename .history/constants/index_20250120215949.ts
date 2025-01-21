@@ -54,7 +54,7 @@ export const navLinks = [
       icon: "/assets/icons/free-plan.svg",
       price: 1.99,
       credits: 100,
-      stripePriceID: "price_1PhNHkFJUXTjfaQFH2c4Rs4M",
+      stripePriceID: "price_1PhNFvFJUXTjfaQFrkc4Rs4M",
       inclusions: [
         {
           label: "100 Credits a month",

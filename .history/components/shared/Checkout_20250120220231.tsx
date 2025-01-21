@@ -84,8 +84,8 @@ const Checkout = ({
         <Button
           type="submit"
           role="link"
-          variant={plan === "Starter Package" ? "outline" : "default"}
-          className={`w-full ${plan === "Starter Package" ? "rounded-none" : ""}`}
+          variant="outline"
+          className="rounded-none w-full"
         >
           Buy Credit
         </Button>

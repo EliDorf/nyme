@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
-import { createTransaction } from "../../../../lib/actions/transaction.action";
+import { createTransaction } from "@/lib/actions/transaction.action";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { trackPurchaseComplete } from "../../../../lib/analytics/dataLayer";
-import Transaction from "../../../../lib/database/models/transaction.model";
-import { connectToDatabase } from "../../../../lib/database/mongoose";
+import { trackPurchaseComplete } from "@/lib/analytics/dataLayer";
+import Transaction from "@/lib/database/models/transaction.model";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -24,20 +23,11 @@ export async function POST(request: Request) {
   const eventType = event.type;
 
   try {
-    await connectToDatabase();
-    
     switch (eventType) {
+      // Initial subscription creation
       case "checkout.session.completed": {
         const session = event.data.object;
-        
-        // Handle both one-time payments and subscriptions
-        const isSubscription = session.mode === 'subscription';
-        let subscriptionId = null;
-        
-        if (isSubscription) {
-          const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
-          subscriptionId = subscription.id;
-        }
+        const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
         
         const transaction = {
           stripeId: session.id,
@@ -46,23 +36,24 @@ export async function POST(request: Request) {
           credits: Number(session.metadata?.credits) || 0,
           buyerId: session.metadata?.buyerId || "",
           createdAt: new Date(),
-          subscriptionId,
-          isSubscription,
-          subscriptionStatus: isSubscription ? 'active' : null
+          subscriptionId: subscription.id,
+          isSubscription: true,
+          subscriptionStatus: 'active'
         };
 
         const newTransaction = await createTransaction(transaction);
 
-        // Track purchase complete event
-        trackPurchaseComplete(
-          session.id,
-          [{
-            domainName: session.metadata?.plan || "Credit Purchase",
-            price: session.amount_total ? session.amount_total / 100 : 0
-          }],
-          session.amount_total ? session.amount_total / 100 : 0,
-          'USD'
-        );
+        if (typeof window !== "undefined") {
+          trackPurchaseComplete(
+            session.id,
+            [{
+              domainName: session.metadata?.plan || "Credit Subscription",
+              price: session.amount_total ? session.amount_total / 100 : 0
+            }],
+            session.amount_total ? session.amount_total / 100 : 0,
+            'USD'
+          );
+        }
         
         return NextResponse.json({ message: "OK", transaction: newTransaction });
       }
