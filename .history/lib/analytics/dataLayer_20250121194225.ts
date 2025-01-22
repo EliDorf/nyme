@@ -50,63 +50,56 @@ export const trackDomainSearchResultsLoaded = (
   searchQuery: string,
   totalResults: number,
   isDomainAvailable: boolean,
-  suggestedDomains: string[],
-  email?: string
+  suggestedDomains: string[]
 ) => {
   window.dataLayer?.push({
     event: 'domain_search_results_loaded',
     searchQuery,
     totalResults,
     isDomainAvailable,
-    suggestedDomains,
-    ...(email && { email })
+    suggestedDomains
   });
 };
 
-export const trackDomainSuggestionClicked = (clickedDomain: string, suggestionRank: number, email?: string) => {
+export const trackDomainSuggestionClicked = (clickedDomain: string, suggestionRank: number) => {
   window.dataLayer?.push({
     event: 'domain_suggestion_clicked',
     clickedDomain,
-    suggestionRank,
-    ...(email && { email })
+    suggestionRank
   });
 };
 
 // Favorites Management
-export const trackDomainFavoriteAdded = (domainName: string, email?: string) => {
+export const trackDomainFavoriteAdded = (domainName: string) => {
   window.dataLayer?.push({
     event: 'domain_favorite_added',
-    domainName,
-    ...(email && { email })
+    domainName
   });
 };
 
-export const trackDomainFavoriteRemoved = (domainName: string, email?: string) => {
+export const trackDomainFavoriteRemoved = (domainName: string) => {
   window.dataLayer?.push({
     event: 'domain_favorite_removed',
-    domainName,
-    ...(email && { email })
+    domainName
   });
 };
 
 // Cart & Checkout
-export const trackAddToCart = (domainName: string, price: number, currency: Currency = 'USD', email?: string) => {
+export const trackAddToCart = (domainName: string, price: number, currency: Currency = 'USD') => {
   window.dataLayer?.push({
     event: 'domain_add_to_cart',
     domainName,
     price,
-    currency,
-    ...(email && { email })
+    currency
   });
 };
 
-export const trackRemoveFromCart = (domainName: string, price: number, currency: Currency = 'USD', email?: string) => {
+export const trackRemoveFromCart = (domainName: string, price: number, currency: Currency = 'USD') => {
   window.dataLayer?.push({
     event: 'remove_from_cart',
     domainName,
     price,
-    currency,
-    ...(email && { email })
+    currency
   });
 };
 
@@ -171,12 +164,11 @@ export const trackSubscriptionRenewal = (
 };
 
 // Error & AI Feedback
-export const trackDomainSearchError = (errorCode: string, errorMessage: string, email?: string) => {
+export const trackDomainSearchError = (errorCode: string, errorMessage: string) => {
   window.dataLayer?.push({
     event: 'domain_search_error',
     errorCode,
-    errorMessage,
-    ...(email && { email })
+    errorMessage
   });
 };
 
