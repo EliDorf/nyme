@@ -34,26 +34,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure all Clerk components have correct background in dark mode */
 .dark .cl-headerTitle,
-.dark .cl-headerContent,
-.dark .cl-header,
-.dark .cl-main,
-.dark .cl-footer,
-.dark .cl-footerAction,
-.dark .cl-footerText {
-  color: var(--cl-text-primary);
-  background: transparent !important;
-}
-
-.dark .cl-card,
-.dark .cl-main,
-.dark .cl-headerContent,
-.dark .cl-footer,
-.dark .cl-footerAction {
-  background-color: var(--cl-card-background) !important;
-}
-
 .dark .cl-headerSubtitle,
 .dark .cl-formFieldLabel,
 .dark .cl-identityPreviewText,

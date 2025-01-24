@@ -452,7 +452,6 @@ export default function DomainFinder() {
                       />
                     </div>
                   )}
-                </div>
 
                 <TabsContent value="available" className="space-y-4">
                   {isListView ? (

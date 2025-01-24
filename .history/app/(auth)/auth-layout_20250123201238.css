@@ -7,7 +7,7 @@
 .dark {
   /* Card/Container styles */
   --cl-background: hsl(224 71.4% 4.1%);
-  --cl-card-background: hsl(222 47% 11%);
+  --cl-card-background: hsl(215 27.9% 16.9%);
   --cl-card-border: hsl(215 27.9% 16.9%);
   
   /* Text styles */
@@ -15,45 +15,26 @@
   --cl-text-secondary: hsl(217.9 10.6% 64.9%);
   
   /* Input styles */
-  --cl-input-background: hsl(217 33% 17%);
+  --cl-input-background: hsl(224 71.4% 4.1%);
   --cl-input-border: hsl(215 27.9% 16.9%);
   --cl-input-text: hsl(210 20% 98%);
   
   /* Button styles */
-  --cl-button-background: hsl(222 47% 11%);
+  --cl-button-background: hsl(220.9 39.3% 11%);
   --cl-button-text: hsl(210 20% 98%);
   
   /* Social buttons */
-  --cl-social-button-background: hsl(217 33% 17%);
+  --cl-social-button-background: hsl(215 27.9% 16.9%);
   --cl-social-button-text: hsl(210 20% 98%);
 }
 
 .dark .cl-card {
   background-color: var(--cl-card-background);
-  border: 1px solid hsl(215 27.9% 16.9%);
+  border-color: var(--cl-card-border);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure all Clerk components have correct background in dark mode */
 .dark .cl-headerTitle,
-.dark .cl-headerContent,
-.dark .cl-header,
-.dark .cl-main,
-.dark .cl-footer,
-.dark .cl-footerAction,
-.dark .cl-footerText {
-  color: var(--cl-text-primary);
-  background: transparent !important;
-}
-
-.dark .cl-card,
-.dark .cl-main,
-.dark .cl-headerContent,
-.dark .cl-footer,
-.dark .cl-footerAction {
-  background-color: var(--cl-card-background) !important;
-}
-
 .dark .cl-headerSubtitle,
 .dark .cl-formFieldLabel,
 .dark .cl-identityPreviewText,
@@ -66,7 +47,7 @@
 
 .dark .cl-formFieldInput {
   background-color: var(--cl-input-background);
-  border: 1px solid var(--cl-input-border);
+  border-color: var(--cl-input-border);
   color: var(--cl-input-text);
 }
 
@@ -76,52 +57,33 @@
 }
 
 .dark .cl-formButtonPrimary {
-  background-color: hsl(265 89% 78%);
-  color: hsl(224 71.4% 4.1%);
-  font-weight: 500;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
 .dark .cl-formButtonPrimary:hover {
-  background-color: hsl(265 89% 82%);
+  opacity: 0.9;
 }
 
 .dark .cl-socialButtonsBlockButton {
   background-color: var(--cl-social-button-background);
   color: var(--cl-social-button-text);
-  border: 1px solid hsl(215 27.9% 16.9%);
-  transition: all 0.2s ease;
+  border: 1px solid var(--cl-card-border);
 }
 
 .dark .cl-socialButtonsBlockButton:hover {
-  background-color: hsl(217 33% 20%);
-  border-color: hsl(215 27.9% 20%);
+  background-color: hsl(215 27.9% 20%);
 }
 
 .dark .cl-dividerLine {
-  border-color: hsl(215 27.9% 16.9%);
+  border-color: var(--cl-card-border);
 }
 
 .dark .cl-alert {
   background-color: var(--cl-card-background);
-  border: 1px solid hsl(215 27.9% 16.9%);
+  border-color: var(--cl-card-border);
 }
 
 .dark .cl-error {
-  color: hsl(0 84.2% 60.2%);
-}
-
-/* Outer card container in dark mode */
-.dark .cl-rootBox {
-  background-color: hsl(222 47% 11%);
-  border: 1px solid hsl(215 27.9% 16.9%);
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.dark .cl-internal-b3fm6y {
-  background-color: hsl(224 71.4% 4.1%);
-}
-
-.dark .cl-pageScrollBox {
-  background-color: hsl(224 71.4% 4.1%);
+  color: hsl(var(--destructive));
 }

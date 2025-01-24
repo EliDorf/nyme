@@ -54,22 +54,6 @@ export default function DomainFinder() {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isListView, setIsListView] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
-
-  // Handle mobile view after hydration is complete
-  useEffect(() => {
-    setIsMounted(true)
-    const handleResize = () => {
-      setIsListView(window.innerWidth < 640)
-    }
-    
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  // Prevent layout shift by hiding the switch until hydrated
-  const showSwitch = isMounted
   const [domains, setDomains] = useState<Domain[]>([])
   const [error, setError] = useState<string | null>(null)
   const [hasSearched, setHasSearched] = useState(false)
@@ -394,13 +378,13 @@ export default function DomainFinder() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                <ScrollArea className="h-[120px] md:h-auto">
-                  <div className="grid grid-cols-2 gap-2 pb-2 md:flex md:flex-wrap md:pb-0">
+                <ScrollArea className="h-[100px] md:h-auto">
+                  <div className="flex flex-nowrap gap-2 pb-2 md:flex-wrap md:pb-0">
                       {suggestions.map((suggestion) => (
                         <Button
                           key={suggestion}
                           variant="outline"
-                          className="h-8 w-full shrink-0 justify-start px-2 text-sm transition-all hover:shadow-md md:h-auto md:w-[calc(33.333%-0.667rem)] md:p-4 md:text-base lg:w-[calc(25%-0.75rem)]"
+                          className="h-auto w-[200px] shrink-0 justify-start p-4 transition-all hover:shadow-md md:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)]"
                                 onClick={() => {
                                   const userEmail = user?.primaryEmailAddress?.emailAddress;
                                   trackDomainSuggestionClicked(suggestion, suggestions.indexOf(suggestion) + 1, userEmail);
@@ -408,9 +392,13 @@ export default function DomainFinder() {
                             handleSearch();
                           }}
                         >
-                          <div className="flex w-full items-center justify-between gap-1">
-                            <span className="font-medium truncate">{suggestion}</span>
-                            <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground/40 md:h-4 md:w-4" />
+                          <div className="flex w-full items-center justify-between">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">{suggestion}</span>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
                           </div>
                         </Button>
                       ))}
@@ -428,7 +416,7 @@ export default function DomainFinder() {
                     <TabsTrigger value="available" className="bg-green-100/80 px-4 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-green-700">Available</span>
-                        <Badge variant="secondary" className="ml-2 bg-black/10 px-2">
+                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
                           {availableDomains.length}
                         </Badge>
                       </div>
@@ -436,22 +424,20 @@ export default function DomainFinder() {
                     <TabsTrigger value="unavailable" className="bg-red-100/80 px-4 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-red-700">Unavailable</span>
-                        <Badge variant="secondary" className="ml-2 bg-black/10 px-2">
+                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
                           {unavailableDomains.length}
                         </Badge>
                       </div>
                     </TabsTrigger>
                   </TabsList>
-                  {showSwitch && (
-                    <div className="flex items-center space-x-2">
-                      <Label htmlFor="list-view" className="text-sm">List View</Label>
-                      <Switch
-                        id="list-view"
-                        checked={isListView}
-                        onCheckedChange={setIsListView}
-                      />
-                    </div>
-                  )}
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="list-view" className="text-sm">List View</Label>
+                    <Switch
+                      id="list-view"
+                      checked={isListView}
+                      onCheckedChange={setIsListView}
+                    />
+                  </div>
                 </div>
 
                 <TabsContent value="available" className="space-y-4">

@@ -53,23 +53,26 @@ export default function DomainFinder() {
   const [searchTerm, setSearchTerm] = useState("")
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [isListView, setIsListView] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
+  const [isListView, setIsListView] = useState(() => {
+    // Initialize on client-side only to avoid hydration mismatch
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 640
+    }
+    return false
+  })
 
-  // Handle mobile view after hydration is complete
+  // Update list view when window is resized
   useEffect(() => {
-    setIsMounted(true)
     const handleResize = () => {
       setIsListView(window.innerWidth < 640)
     }
-    
+
+    // Set initial value
     handleResize()
+
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  // Prevent layout shift by hiding the switch until hydrated
-  const showSwitch = isMounted
   const [domains, setDomains] = useState<Domain[]>([])
   const [error, setError] = useState<string | null>(null)
   const [hasSearched, setHasSearched] = useState(false)
@@ -428,7 +431,7 @@ export default function DomainFinder() {
                     <TabsTrigger value="available" className="bg-green-100/80 px-4 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-green-700">Available</span>
-                        <Badge variant="secondary" className="ml-2 bg-black/10 px-2">
+                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
                           {availableDomains.length}
                         </Badge>
                       </div>
@@ -436,22 +439,20 @@ export default function DomainFinder() {
                     <TabsTrigger value="unavailable" className="bg-red-100/80 px-4 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-red-700">Unavailable</span>
-                        <Badge variant="secondary" className="ml-2 bg-black/10 px-2">
+                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
                           {unavailableDomains.length}
                         </Badge>
                       </div>
                     </TabsTrigger>
                   </TabsList>
-                  {showSwitch && (
-                    <div className="flex items-center space-x-2">
-                      <Label htmlFor="list-view" className="text-sm">List View</Label>
-                      <Switch
-                        id="list-view"
-                        checked={isListView}
-                        onCheckedChange={setIsListView}
-                      />
-                    </div>
-                  )}
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="list-view" className="text-sm">List View</Label>
+                    <Switch
+                      id="list-view"
+                      checked={isListView}
+                      onCheckedChange={setIsListView}
+                    />
+                  </div>
                 </div>
 
                 <TabsContent value="available" className="space-y-4">

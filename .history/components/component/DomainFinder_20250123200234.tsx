@@ -428,7 +428,7 @@ export default function DomainFinder() {
                     <TabsTrigger value="available" className="bg-green-100/80 px-4 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-green-700">Available</span>
-                        <Badge variant="secondary" className="ml-2 bg-black/10 px-2">
+                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
                           {availableDomains.length}
                         </Badge>
                       </div>
@@ -436,7 +436,7 @@ export default function DomainFinder() {
                     <TabsTrigger value="unavailable" className="bg-red-100/80 px-4 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-red-700">Unavailable</span>
-                        <Badge variant="secondary" className="ml-2 bg-black/10 px-2">
+                        <Badge variant="secondary" className="ml-2 bg-white/80 px-2">
                           {unavailableDomains.length}
                         </Badge>
                       </div>
