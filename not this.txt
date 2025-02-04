@@ -3,9 +3,6 @@ DB:OMmAc2bSWH4DCuJn
 
 deployed app: https://nyme.vercel.app/
 
-1:35 min on video
-
-
 
 {"_id":{"$oid":"66a5a48c35fb57aec946da2c"},"clerkId":"user_2jr3v79JC75gU6U88Ug4PRtw9iR","email":"edorf222@gmail.com","username":"","photo":"https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yanIzdjJxZkcxSlU3VkhBWlBGZHNqOEM3bk0ifQ","firstName":"Eli","lastName":"Dorf","planId":{"$numberInt":"1"},"creditBalance":{"$numberInt":"0"},"__v":{"$numberInt":"0"}}
 
