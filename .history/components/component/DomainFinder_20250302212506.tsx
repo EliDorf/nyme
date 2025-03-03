@@ -587,7 +587,12 @@ export default function DomainFinder() {
                                     size="sm"
                                     onClick={() => {
                                       const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                      trackRegistration(domain.domain, user?.id, userEmail);
+                                      if (user) {
+                                        trackRegistration(domain.domain, user.id, userEmail);
+                                      } else {
+                                        // Handle case where user is not logged in
+                                        window.open(getAffiliateLink(domain.domain), '_blank');
+                                      }
                                     }}
                                   >
                                     Register
@@ -652,7 +657,12 @@ export default function DomainFinder() {
                                 className="w-full"
                                 onClick={() => {
                                   const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                  trackRegistration(domain.domain, user?.id, userEmail);
+                                  if (user) {
+                                    trackRegistration(domain.domain, user.id, userEmail);
+                                  } else {
+                                    // Handle case where user is not logged in
+                                    window.open(getAffiliateLink(domain.domain), '_blank');
+                                  }
                                 }}
                               >
                                 Register Domain
@@ -719,5 +729,3 @@ export default function DomainFinder() {
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'

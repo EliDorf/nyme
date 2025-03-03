@@ -27,6 +27,7 @@ import { InsufficientCreditsModal } from "../shared/InsufficientCreditsModal"
 import { useSuggestions, SuggestionMode } from "./UseSuggestion"
 import { updateCredits } from "../../lib/actions/user.action"
 import { useUserData } from "../../lib/actions/useUserData"
+import { ToggleGroup, ToggleGroupItem } from "../../components/ui/toggle-group"
 
 interface DomainStatus {
   domain: string;
@@ -44,41 +45,6 @@ const TLDs = ['.com', '.io', '.ai', '.co', '.net'];
 
 const getAffiliateLink = (domain: string) => {
   return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}&clickID=2eZ1DcRCpxyKUZtRio1i6XbcUkCXtpSh2w30Ro0&irgwc=1&utm_source=IR&utm_medium=Affiliate&utm_campaign=5673970&affnetwork=ir&ref=ir`;
-};
-
-// Track domain registration
-const trackRegistration = async (domain: string, userId?: string, userEmail?: string) => {
-  try {
-    // Track in analytics
-    trackAddToCart(domain, 9.99, 'USD', userEmail);
-    
-    // Track in database if user is logged in
-    if (userId) {
-      const affiliateLink = getAffiliateLink(domain);
-      const response = await fetch('/api/track-domain-registration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          domainName: domain,
-          price: 9.99,
-          currency: 'USD',
-          affiliateLink
-        }),
-      });
-      
-      if (!response.ok) {
-        console.error('Failed to track domain registration:', await response.text());
-      }
-    }
-    
-    // Open affiliate link
-    window.open(getAffiliateLink(domain), '_blank');
-  } catch (error) {
-    console.error('Error tracking domain registration:', error);
-  }
 };
 
 export default function DomainFinder() {
@@ -377,14 +343,12 @@ export default function DomainFinder() {
                             checked={mode === 'short'}
                             onCheckedChange={() => setMode('short')}
                           >
-                            <TextCursorInput className="mr-2 h-4 w-4" />
                             Short Mode
                           </DropdownMenuCheckboxItem>
                           <DropdownMenuCheckboxItem 
                             checked={mode === 'synonym'}
                             onCheckedChange={() => setMode('synonym')}
                           >
-                            <Shuffle className="mr-2 h-4 w-4" />
                             Synonym Mode
                           </DropdownMenuCheckboxItem>
                           <DropdownMenuSeparator />
@@ -423,28 +387,16 @@ export default function DomainFinder() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Label className="text-sm font-medium">Name Generation Mode:</Label>
-                      <div className="flex bg-muted rounded-md p-1">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={mode === 'short' ? 'default' : 'ghost'}
-                          className="rounded-sm px-3"
-                          onClick={() => setMode('short')}
-                        >
-                          <TextCursorInput className="h-4 w-4 mr-2" />
+                      <ToggleGroup type="single" value={mode} onValueChange={(value) => value && setMode(value as SuggestionMode)}>
+                        <ToggleGroupItem value="short" aria-label="Short Mode" className="gap-1">
+                          <TextCursorInput className="h-4 w-4" />
                           <span className="hidden sm:inline">Short</span>
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={mode === 'synonym' ? 'default' : 'ghost'}
-                          className="rounded-sm px-3"
-                          onClick={() => setMode('synonym')}
-                        >
-                          <Shuffle className="h-4 w-4 mr-2" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="synonym" aria-label="Synonym Mode" className="gap-1">
+                          <Shuffle className="h-4 w-4" />
                           <span className="hidden sm:inline">Synonym</span>
-                        </Button>
-                      </div>
+                        </ToggleGroupItem>
+                      </ToggleGroup>
                     </div>
                     <TooltipProvider>
                       <Tooltip>
@@ -484,14 +436,9 @@ export default function DomainFinder() {
                   <CardTitle className="flex items-center text-base">
                     <Sparkles className="mr-2 h-5 w-5 text-primary" />
                     AI-Powered Suggestions
-                    <Badge variant="outline" className="ml-2 px-2 py-0 text-xs">
-                      {mode === 'short' ? 'Short Mode' : 'Synonym Mode'}
-                    </Badge>
                   </CardTitle>
                   <CardDescription>
-                    {mode === 'short' 
-                      ? 'Short, brandable alternatives based on your search' 
-                      : 'Synonym-based alternatives capturing the essence of your search'}
+                    Smart alternatives based on your search
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -585,10 +532,11 @@ export default function DomainFinder() {
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    onClick={() => {
-                                      const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                      trackRegistration(domain.domain, user?.id, userEmail);
-                                    }}
+                                onClick={() => {
+                                  const userEmail = user?.primaryEmailAddress?.emailAddress;
+                                  trackAddToCart(domain.domain, 9.99, 'USD', userEmail); // Using default price since actual price isn't available
+                                  window.open(getAffiliateLink(domain.domain), '_blank');
+                                }}
                                   >
                                     Register
                                   </Button>
@@ -652,7 +600,8 @@ export default function DomainFinder() {
                                 className="w-full"
                                 onClick={() => {
                                   const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                  trackRegistration(domain.domain, user?.id, userEmail);
+                                  trackAddToCart(domain.domain, 9.99, 'USD', userEmail); // Using default price since actual price isn't available
+                                  window.open(getAffiliateLink(domain.domain), '_blank');
                                 }}
                               >
                                 Register Domain
@@ -719,5 +668,3 @@ export default function DomainFinder() {
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'

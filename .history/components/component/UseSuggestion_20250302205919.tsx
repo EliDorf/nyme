@@ -17,19 +17,15 @@ const PLACEHOLDER_SUGGESTIONS = [
   "Namye"
 ];
 
-export type SuggestionMode = 'short' | 'synonym';
-
 export function useSuggestions() {
   const [suggestions, setSuggestions] = useState<string[]>(PLACEHOLDER_SUGGESTIONS)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [mode, setMode] = useState<SuggestionMode>('short')
   const { user } = useUser()
 
-  const handleSubmit = async (input: string, suggestionMode: SuggestionMode = 'short') => {
+  const handleSubmit = async (input: string, mode: 'synonym' | 'short') => {
     setIsLoading(true)
     setError(null)
-    setMode(suggestionMode)
     
     try {
       const response = await fetch('/api/generate', {
@@ -40,7 +36,7 @@ export function useSuggestions() {
         body: JSON.stringify({ 
           input,
           userId: user?.id || 'anonymous',
-          mode: suggestionMode
+          mode
         }),
       })
   
@@ -70,5 +66,5 @@ export function useSuggestions() {
     }
   }
 
-  return { suggestions, isLoading, error, handleSubmit, mode, setMode }
+  return { suggestions, isLoading, error, handleSubmit }
 }

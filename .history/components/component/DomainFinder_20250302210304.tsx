@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Search, CreditCard, Globe, X, Sparkles, ArrowRight, Bell, SlidersHorizontal, DollarSign, ChevronRight, TextCursorInput, Shuffle } from 'lucide-react'
+import { Search, CreditCard, Globe, X, Sparkles, ArrowRight, Bell, SlidersHorizontal, DollarSign, ChevronRight } from 'lucide-react'
 import { 
   trackDomainSearchInitiated,
   trackDomainSearchResultsLoaded,
@@ -44,41 +44,6 @@ const TLDs = ['.com', '.io', '.ai', '.co', '.net'];
 
 const getAffiliateLink = (domain: string) => {
   return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}&clickID=2eZ1DcRCpxyKUZtRio1i6XbcUkCXtpSh2w30Ro0&irgwc=1&utm_source=IR&utm_medium=Affiliate&utm_campaign=5673970&affnetwork=ir&ref=ir`;
-};
-
-// Track domain registration
-const trackRegistration = async (domain: string, userId?: string, userEmail?: string) => {
-  try {
-    // Track in analytics
-    trackAddToCart(domain, 9.99, 'USD', userEmail);
-    
-    // Track in database if user is logged in
-    if (userId) {
-      const affiliateLink = getAffiliateLink(domain);
-      const response = await fetch('/api/track-domain-registration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          domainName: domain,
-          price: 9.99,
-          currency: 'USD',
-          affiliateLink
-        }),
-      });
-      
-      if (!response.ok) {
-        console.error('Failed to track domain registration:', await response.text());
-      }
-    }
-    
-    // Open affiliate link
-    window.open(getAffiliateLink(domain), '_blank');
-  } catch (error) {
-    console.error('Error tracking domain registration:', error);
-  }
 };
 
 export default function DomainFinder() {
@@ -342,124 +307,95 @@ export default function DomainFinder() {
             {/* Search Section */}
             <Card className="overflow-hidden">
               <CardContent className="p-3 md:p-4">
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Try three letters of a word..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-9"
-                        disabled={isLoading}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" className="flex-1 sm:flex-none">
-                            <SlidersHorizontal className="mr-2 h-4 w-4" />
-                            Filters
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                          <DropdownMenuLabel>Domain Settings</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuCheckboxItem checked>
-                            Include TLD variations
-                          </DropdownMenuCheckboxItem>
-                          <DropdownMenuCheckboxItem checked>
-                            Show price estimates
-                          </DropdownMenuCheckboxItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuLabel>Name Generation</DropdownMenuLabel>
-                          <DropdownMenuCheckboxItem 
-                            checked={mode === 'short'}
-                            onCheckedChange={() => setMode('short')}
-                          >
-                            <TextCursorInput className="mr-2 h-4 w-4" />
-                            Short Mode
-                          </DropdownMenuCheckboxItem>
-                          <DropdownMenuCheckboxItem 
-                            checked={mode === 'synonym'}
-                            onCheckedChange={() => setMode('synonym')}
-                          >
-                            <Shuffle className="mr-2 h-4 w-4" />
-                            Synonym Mode
-                          </DropdownMenuCheckboxItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuLabel>Price Range</DropdownMenuLabel>
-                          <DropdownMenuItem>
-                            <DollarSign className="mr-2 h-4 w-4" />
-                            Under $50/year
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <DollarSign className="mr-2 h-4 w-4" />
-                            $50 - $100/year
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                      <Button 
-                        className="flex-1 sm:flex-none"
-                        onClick={handleSearch}
-                        disabled={isLoading}
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Try three letters of a word..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-9"
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex gap-1 mr-2">
+                      <Button
+                        variant={mode === 'short' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setMode('short')}
+                        className="whitespace-nowrap"
                       >
-                        {isLoading ? (
-                          <>
-                            <Skeleton className="h-4 w-4 rounded-full mr-2" />
-                            Searching...
-                          </>
-                        ) : (
-                          <>
-                            <Search className="mr-2 h-4 w-4" />
-                            Search
-                          </>
-                        )}
+                        Short Mode
+                      </Button>
+                      <Button
+                        variant={mode === 'synonym' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setMode('synonym')}
+                        className="whitespace-nowrap"
+                      >
+                        Synonym Mode
                       </Button>
                     </div>
-                  </div>
-                  
-                  {/* Mode Selection */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Label className="text-sm font-medium">Name Generation Mode:</Label>
-                      <div className="flex bg-muted rounded-md p-1">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={mode === 'short' ? 'default' : 'ghost'}
-                          className="rounded-sm px-3"
-                          onClick={() => setMode('short')}
-                        >
-                          <TextCursorInput className="h-4 w-4 mr-2" />
-                          <span className="hidden sm:inline">Short</span>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="flex-1 sm:flex-none">
+                          <SlidersHorizontal className="mr-2 h-4 w-4" />
+                          Filters
                         </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={mode === 'synonym' ? 'default' : 'ghost'}
-                          className="rounded-sm px-3"
-                          onClick={() => setMode('synonym')}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel>Domain Settings</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuCheckboxItem checked>
+                          Include TLD variations
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem checked>
+                          Show price estimates
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuLabel>Name Generation</DropdownMenuLabel>
+                        <DropdownMenuCheckboxItem 
+                          checked={mode === 'short'}
+                          onCheckedChange={() => setMode('short')}
                         >
-                          <Shuffle className="h-4 w-4 mr-2" />
-                          <span className="hidden sm:inline">Synonym</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="text-xs text-muted-foreground">
-                            {mode === 'short' ? 'Generates short, brandable names' : 'Generates names based on synonyms'}
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                          {mode === 'short' 
-                            ? 'Short Mode: Creates concise, brandable names ideal for domains' 
-                            : 'Synonym Mode: Creates alternative names based on related concepts'}
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                          Short Mode
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem 
+                          checked={mode === 'synonym'}
+                          onCheckedChange={() => setMode('synonym')}
+                        >
+                          Synonym Mode
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuLabel>Price Range</DropdownMenuLabel>
+                        <DropdownMenuItem>
+                          <DollarSign className="mr-2 h-4 w-4" />
+                          Under $50/year
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <DollarSign className="mr-2 h-4 w-4" />
+                          $50 - $100/year
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button 
+                      className="flex-1 sm:flex-none"
+                      onClick={handleSearch}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <Skeleton className="h-4 w-4 rounded-full mr-2" />
+                          Searching...
+                        </>
+                      ) : (
+                        <>
+                          <Search className="mr-2 h-4 w-4" />
+                          Search
+                        </>
+                      )}
+                    </Button>
                   </div>
                 </div>
               </CardContent>
@@ -484,14 +420,9 @@ export default function DomainFinder() {
                   <CardTitle className="flex items-center text-base">
                     <Sparkles className="mr-2 h-5 w-5 text-primary" />
                     AI-Powered Suggestions
-                    <Badge variant="outline" className="ml-2 px-2 py-0 text-xs">
-                      {mode === 'short' ? 'Short Mode' : 'Synonym Mode'}
-                    </Badge>
                   </CardTitle>
                   <CardDescription>
-                    {mode === 'short' 
-                      ? 'Short, brandable alternatives based on your search' 
-                      : 'Synonym-based alternatives capturing the essence of your search'}
+                    Smart alternatives based on your search
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -585,10 +516,11 @@ export default function DomainFinder() {
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    onClick={() => {
-                                      const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                      trackRegistration(domain.domain, user?.id, userEmail);
-                                    }}
+                                onClick={() => {
+                                  const userEmail = user?.primaryEmailAddress?.emailAddress;
+                                  trackAddToCart(domain.domain, 9.99, 'USD', userEmail); // Using default price since actual price isn't available
+                                  window.open(getAffiliateLink(domain.domain), '_blank');
+                                }}
                                   >
                                     Register
                                   </Button>
@@ -652,7 +584,8 @@ export default function DomainFinder() {
                                 className="w-full"
                                 onClick={() => {
                                   const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                  trackRegistration(domain.domain, user?.id, userEmail);
+                                  trackAddToCart(domain.domain, 9.99, 'USD', userEmail); // Using default price since actual price isn't available
+                                  window.open(getAffiliateLink(domain.domain), '_blank');
                                 }}
                               >
                                 Register Domain
@@ -719,5 +652,3 @@ export default function DomainFinder() {
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'

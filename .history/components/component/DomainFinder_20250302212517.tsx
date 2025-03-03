@@ -719,5 +719,3 @@ export default function DomainFinder() {
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'

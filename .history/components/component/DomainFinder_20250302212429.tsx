@@ -47,35 +47,33 @@ const getAffiliateLink = (domain: string) => {
 };
 
 // Track domain registration
-const trackRegistration = async (domain: string, userId?: string, userEmail?: string) => {
+const trackRegistration = async (domain: string, userId: string, userEmail?: string) => {
   try {
     // Track in analytics
     trackAddToCart(domain, 9.99, 'USD', userEmail);
     
-    // Track in database if user is logged in
-    if (userId) {
-      const affiliateLink = getAffiliateLink(domain);
-      const response = await fetch('/api/track-domain-registration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          domainName: domain,
-          price: 9.99,
-          currency: 'USD',
-          affiliateLink
-        }),
-      });
-      
-      if (!response.ok) {
-        console.error('Failed to track domain registration:', await response.text());
-      }
+    // Track in database
+    const affiliateLink = getAffiliateLink(domain);
+    const response = await fetch('/api/track-domain-registration', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        domainName: domain,
+        price: 9.99,
+        currency: 'USD',
+        affiliateLink
+      }),
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to track domain registration:', await response.text());
     }
     
     // Open affiliate link
-    window.open(getAffiliateLink(domain), '_blank');
+    window.open(affiliateLink, '_blank');
   } catch (error) {
     console.error('Error tracking domain registration:', error);
   }
@@ -587,7 +585,12 @@ export default function DomainFinder() {
                                     size="sm"
                                     onClick={() => {
                                       const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                      trackRegistration(domain.domain, user?.id, userEmail);
+                                      if (user) {
+                                        trackRegistration(domain.domain, user.id, userEmail);
+                                      } else {
+                                        // Handle case where user is not logged in
+                                        window.open(getAffiliateLink(domain.domain), '_blank');
+                                      }
                                     }}
                                   >
                                     Register
@@ -652,7 +655,12 @@ export default function DomainFinder() {
                                 className="w-full"
                                 onClick={() => {
                                   const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                  trackRegistration(domain.domain, user?.id, userEmail);
+                                  if (user) {
+                                    trackRegistration(domain.domain, user.id, userEmail);
+                                  } else {
+                                    // Handle case where user is not logged in
+                                    window.open(getAffiliateLink(domain.domain), '_blank');
+                                  }
                                 }}
                               >
                                 Register Domain
@@ -719,5 +727,3 @@ export default function DomainFinder() {
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'

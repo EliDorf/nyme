@@ -46,41 +46,6 @@ const getAffiliateLink = (domain: string) => {
   return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}&clickID=2eZ1DcRCpxyKUZtRio1i6XbcUkCXtpSh2w30Ro0&irgwc=1&utm_source=IR&utm_medium=Affiliate&utm_campaign=5673970&affnetwork=ir&ref=ir`;
 };
 
-// Track domain registration
-const trackRegistration = async (domain: string, userId?: string, userEmail?: string) => {
-  try {
-    // Track in analytics
-    trackAddToCart(domain, 9.99, 'USD', userEmail);
-    
-    // Track in database if user is logged in
-    if (userId) {
-      const affiliateLink = getAffiliateLink(domain);
-      const response = await fetch('/api/track-domain-registration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          domainName: domain,
-          price: 9.99,
-          currency: 'USD',
-          affiliateLink
-        }),
-      });
-      
-      if (!response.ok) {
-        console.error('Failed to track domain registration:', await response.text());
-      }
-    }
-    
-    // Open affiliate link
-    window.open(getAffiliateLink(domain), '_blank');
-  } catch (error) {
-    console.error('Error tracking domain registration:', error);
-  }
-};
-
 export default function DomainFinder() {
   const { user } = useUser();
   const { userData, refetchUserData } = useUserData();
@@ -484,9 +449,6 @@ export default function DomainFinder() {
                   <CardTitle className="flex items-center text-base">
                     <Sparkles className="mr-2 h-5 w-5 text-primary" />
                     AI-Powered Suggestions
-                    <Badge variant="outline" className="ml-2 px-2 py-0 text-xs">
-                      {mode === 'short' ? 'Short Mode' : 'Synonym Mode'}
-                    </Badge>
                   </CardTitle>
                   <CardDescription>
                     {mode === 'short' 
@@ -585,10 +547,11 @@ export default function DomainFinder() {
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    onClick={() => {
-                                      const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                      trackRegistration(domain.domain, user?.id, userEmail);
-                                    }}
+                                onClick={() => {
+                                  const userEmail = user?.primaryEmailAddress?.emailAddress;
+                                  trackAddToCart(domain.domain, 9.99, 'USD', userEmail); // Using default price since actual price isn't available
+                                  window.open(getAffiliateLink(domain.domain), '_blank');
+                                }}
                                   >
                                     Register
                                   </Button>
@@ -652,7 +615,8 @@ export default function DomainFinder() {
                                 className="w-full"
                                 onClick={() => {
                                   const userEmail = user?.primaryEmailAddress?.emailAddress;
-                                  trackRegistration(domain.domain, user?.id, userEmail);
+                                  trackAddToCart(domain.domain, 9.99, 'USD', userEmail); // Using default price since actual price isn't available
+                                  window.open(getAffiliateLink(domain.domain), '_blank');
                                 }}
                               >
                                 Register Domain
@@ -719,5 +683,3 @@ export default function DomainFinder() {
     </div>
   )
 }
-
-export const dynamic = 'force-dynamic'
