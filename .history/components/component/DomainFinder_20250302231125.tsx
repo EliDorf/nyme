@@ -25,7 +25,7 @@ import axios from 'axios'
 import { creditFee } from "../../constants"
 import { InsufficientCreditsModal } from "../shared/InsufficientCreditsModal"
 import { useSuggestions, SuggestionMode } from "./UseSuggestion"
-import { updateCredits, getUserById } from "../../lib/actions/user.action"
+import { updateCredits } from "../../lib/actions/user.action"
 import { useUserData } from "../../lib/actions/useUserData"
 
 interface DomainStatus {
@@ -83,13 +83,14 @@ const trackRegistration = async (domain: string, userId?: string, userEmail?: st
 
 export default function DomainFinder() {
   const { user } = useUser();
-  const { userData, refetchUserData, isLoading: isLoadingUserData } = useUserData();
+  const { userData, refetchUserData } = useUserData();
   const { suggestions, isLoading: suggestionsLoading, error: suggestionsError, handleSubmit, mode, setMode } = useSuggestions();
   const [searchTerm, setSearchTerm] = useState("")
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isListView, setIsListView] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
 
   // Handle mobile view after hydration is complete
   useEffect(() => {
@@ -313,6 +314,40 @@ export default function DomainFinder() {
 
   const getDisplayStatus = (status: string) => {
     return isAvailable(status) ? "Available" : status;
+  };
+
+  // Add this useEffect to handle initial loading state
+  useEffect(() => {
+    if (user) {
+      const fetchUserData = async () => {
+        setIsLoadingUserData(true);
+        try {
+          await refetchUserData();
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+          setIsLoadingUserData(false);
+        }
+      };
+      
+      fetchUserData();
+    }
+  }, [user]);
+
+  // Modify the refetchUserData function
+  const refetchUserData = async () => {
+    if (!user) return;
+    
+    try {
+      setIsLoadingUserData(true);
+      const userId = user.id;
+      const userData = await getUserById(userId);
+      setUserData(userData);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setIsLoadingUserData(false);
+    }
   };
 
   return (

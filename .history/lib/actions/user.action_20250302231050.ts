@@ -3,9 +3,37 @@
 import { revalidatePath } from "next/cache";
 
 import User from "../database/models/user.model";
+import DomainSearch from "../database/models/DomainSearches";
 import { connectToDatabase } from "../database/mongoose";
 import { handleError } from "../utils";
 import { ObjectId } from 'mongodb';
+
+// Fetch available domains for a user
+export async function getAvailableDomainsForUser(userId: string) {
+  try {
+    await connectToDatabase();
+
+    const domainSearches = await DomainSearch.find({ userId });
+    
+    // Flatten all domains from all searches and filter for available ones
+    const availableDomains = domainSearches.flatMap(search => 
+      search.domains.filter((domain: { status: string }) => 
+        domain.status.includes('undelegated') || 
+        domain.status.includes('inactive')
+      )
+    );
+
+    // Remove duplicates based on domain name
+    const uniqueDomains = Array.from(
+      new Map(availableDomains.map((domain: { name: string }) => [domain.name, domain])).values()
+    );
+
+    return uniqueDomains;
+  } catch (error) {
+    console.error('Error fetching available domains:', error);
+    throw error;
+  }
+}
 
 
 type CreateUserParams = {
@@ -29,37 +57,80 @@ export async function createUser(user: CreateUserParams) {
   try {
     await connectToDatabase();
 
+    console.log('Creating new user with data:', user);
+    
+    // Check if user already exists to prevent duplicate creation attempts
+    const existingUser = await User.findOne({ 
+      $or: [
+        { clerkId: user.clerkId },
+        { email: user.email }
+      ]
+    });
+    
+    if (existingUser) {
+      console.log('User already exists:', existingUser);
+      return JSON.parse(JSON.stringify(existingUser));
+    }
+    
+    // Ensure username is unique by adding a timestamp if needed
+    if (!user.username || user.username.trim() === '') {
+      user.username = `user_${user.clerkId.slice(-6)}`;
+    }
+    
+    // Add a timestamp to ensure uniqueness in case of conflicts
+    const timestamp = Date.now().toString().slice(-4);
+    const usernameExists = await User.findOne({ username: user.username });
+    if (usernameExists) {
+      user.username = `${user.username}_${timestamp}`;
+    }
+    
     const newUser = await User.create(user);
 
+    if (!newUser) {
+      console.error('Failed to create user:', user);
+      throw new Error('Failed to create user');
+    }
+
+    console.log('Successfully created user:', newUser);
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    handleError(error);
+    console.error('Error in createUser:', error);
+    throw error; // Let the webhook handler handle the error
   }
 }
 
 // READ
+import { clerkClient } from "@clerk/nextjs/server";
+
 export async function getUserById(userId: string) {
   try {
     await connectToDatabase();
 
-    console.log('Searching for user with clerkId:', userId);
+    console.log('Getting user with Clerk ID:', userId);
     
-    // First try to find all users to see what's in the database
-    const allUsers = await User.find({});
-    console.log('All users in database:', allUsers);
-
-    const user = await User.findOne({ clerkId: userId });
-    console.log('Query result:', user);
+    // Try both ways to find the user
+    let user = await User.findOne({ clerkId: userId });
+    
+    if (!user) {
+      // If not found by clerkId, try getting the MongoDB _id from Clerk metadata
+      const clerkUser = await clerkClient.users.getUser(userId);
+      const mongoDbId = clerkUser.publicMetadata.userId;
+      
+      if (mongoDbId) {
+        console.log('Found MongoDB ID in Clerk metadata:', mongoDbId);
+        user = await User.findById(mongoDbId);
+      }
+    }
 
     if (!user) {
-      console.error('User not found for clerkId:', userId);
+      console.error('User not found for ID:', userId);
       throw new Error("User not found");
     }
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     console.error('Error getting user:', error);
-    throw error; // Let the caller handle the error
+    throw error;
   }
 }
 

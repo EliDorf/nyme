@@ -58,6 +58,32 @@ export async function createUser(user: CreateUserParams) {
     await connectToDatabase();
 
     console.log('Creating new user with data:', user);
+    
+    // Check if user already exists to prevent duplicate creation attempts
+    const existingUser = await User.findOne({ 
+      $or: [
+        { clerkId: user.clerkId },
+        { email: user.email }
+      ]
+    });
+    
+    if (existingUser) {
+      console.log('User already exists:', existingUser);
+      return JSON.parse(JSON.stringify(existingUser));
+    }
+    
+    // Ensure username is unique by adding a timestamp if needed
+    if (!user.username || user.username.trim() === '') {
+      user.username = `user_${user.clerkId.slice(-6)}`;
+    }
+    
+    // Add a timestamp to ensure uniqueness in case of conflicts
+    const timestamp = Date.now().toString().slice(-4);
+    const usernameExists = await User.findOne({ username: user.username });
+    if (usernameExists) {
+      user.username = `${user.username}_${timestamp}`;
+    }
+    
     const newUser = await User.create(user);
 
     if (!newUser) {

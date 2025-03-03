@@ -83,13 +83,14 @@ const trackRegistration = async (domain: string, userId?: string, userEmail?: st
 
 export default function DomainFinder() {
   const { user } = useUser();
-  const { userData, refetchUserData, isLoading: isLoadingUserData } = useUserData();
+  const { userData, refetchUserData } = useUserData();
   const { suggestions, isLoading: suggestionsLoading, error: suggestionsError, handleSubmit, mode, setMode } = useSuggestions();
   const [searchTerm, setSearchTerm] = useState("")
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isListView, setIsListView] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
 
   // Handle mobile view after hydration is complete
   useEffect(() => {
@@ -314,6 +315,19 @@ export default function DomainFinder() {
   const getDisplayStatus = (status: string) => {
     return isAvailable(status) ? "Available" : status;
   };
+
+  // Add this useEffect to handle initial loading state
+  useEffect(() => {
+    if (user) {
+      setIsLoadingUserData(true);
+      refetchUserData()
+        .then(() => setIsLoadingUserData(false))
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+          setIsLoadingUserData(false);
+        });
+    }
+  }, [user, refetchUserData]);
 
   return (
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
