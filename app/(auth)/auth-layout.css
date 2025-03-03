@@ -112,7 +112,7 @@
 
 /* Outer card container in dark mode */
 .dark .cl-rootBox {
-  background-color: hsl(222 47% 11%);
+  background-color: transparent !important;
   border: 1px solid hsl(215 27.9% 16.9%);
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -124,4 +124,56 @@
 
 .dark .cl-pageScrollBox {
   background-color: hsl(224 71.4% 4.1%);
+}
+
+/* Additional dark mode fixes */
+.dark .cl-modalBackdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dark .cl-modalContent {
+  background-color: var(--cl-card-background);
+  border: 1px solid hsl(215 27.9% 16.9%);
+}
+
+.dark .cl-accordionTriggerButton {
+  background-color: var(--cl-card-background);
+  color: var(--cl-text-primary);
+}
+
+.dark .cl-accordionContent {
+  background-color: var(--cl-card-background);
+}
+
+.dark .cl-verificationLinkStatusIcon {
+  color: hsl(265 89% 78%);
+}
+
+.dark .cl-phoneInputBox {
+  background-color: var(--cl-input-background);
+  border-color: var(--cl-input-border);
+}
+
+.dark .cl-phoneInputInput {
+  color: var(--cl-text-primary);
+}
+
+.dark .cl-otpCodeFieldInput {
+  background-color: var(--cl-input-background);
+  border-color: var(--cl-input-border);
+  color: var(--cl-text-primary);
+}
+
+/* Fix for any white backgrounds that might appear */
+.dark .cl-component {
+  background-color: transparent !important;
+}
+
+.dark .cl-auth-form-wrapper {
+  background-color: transparent !important;
+}
+
+/* Ensure the root container is transparent */
+.cl-rootBox {
+  background-color: transparent !important;
 }
