@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs"
 import { Home, User, CreditCard, Moon, Sun } from "lucide-react"
+import Image from "next/image"
 
 export function NewSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -47,10 +48,10 @@ export function NewSidebar() {
   return (
     <>
       <button
-        className="fixed top-4 left-4 z-20 md:hidden"
+        className="fixed top-4 left-4 z-20 md:hidden p-2 bg-background/80 backdrop-blur-sm rounded-md shadow-sm border border-muted"
         onClick={toggleSidebar}
       >
-        {isSidebarOpen ? null : <MenuIcon className="h-6 w-6" />}
+        {isSidebarOpen ? null : <MenuIcon className="h-7 w-7" />}
       </button>
       
       {/* UserButton in top right corner */}
@@ -61,18 +62,18 @@ export function NewSidebar() {
       </div>
 
       {/* Mobile sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-10 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
-        <div className="flex h-14 items-center justify-between px-4 border-b">
+      <div className={`fixed inset-y-0 left-0 z-50 flex h-full w-72 flex-col bg-background border-r border-muted shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
+        <div className="flex h-16 items-center justify-between px-4 border-b">
           <Link href="/" className="flex items-center gap-2 font-semibold" prefetch={false}>
-            <MountainIcon className="h-5 w-5" />
-            <span>Nyme.AI</span>
+            <Image src="/output.svg" alt="Nyme.AI Logo" width={24} height={24} />
+            <span className="text-lg">Nyme.AI</span>
           </Link>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" onClick={toggleTheme}>
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
             <button onClick={toggleSidebar} className="p-2">
-              <XIcon className="h-6 w-6" />
+              <XIcon className="h-7 w-7" />
             </button>
           </div>
         </div>
@@ -85,7 +86,7 @@ export function NewSidebar() {
       <div className="fixed inset-y-0 left-0 z-10 hidden w-64 flex-col bg-background border-r border-muted md:flex">
         <div className="flex h-14 items-center justify-between border-b px-4">
           <Link href="/" className="flex items-center gap-2 font-semibold" prefetch={false}>
-            <MountainIcon className="h-6 w-6" />
+            <Image src="/output.svg" alt="Nyme.AI Logo" width={24} height={24} />
             <span>Nyme.AI</span>
           </Link>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
@@ -97,25 +98,6 @@ export function NewSidebar() {
         </div>
       </div>
     </>
-  )
-}
-
-function MountainIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-    </svg>
   )
 }
 

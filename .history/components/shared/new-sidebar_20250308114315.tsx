@@ -23,22 +23,22 @@ export function NewSidebar() {
   }
 
   const NavItems = () => (
-    <nav className="space-y-2">
+    <nav className="space-y-4">
       <Link href="/" prefetch={false}>
-        <Button variant="ghost" className="w-full justify-start">
-          <Home className="mr-2 h-4 w-4" />
+        <Button variant="ghost" className="w-full justify-start text-lg h-16 px-4">
+          <Home className="mr-4 h-7 w-7" />
           Dashboard
         </Button>
       </Link>
       <Link href="/profile" prefetch={false}>
-        <Button variant="ghost" className="w-full justify-start">
-          <User className="mr-2 h-4 w-4" />
+        <Button variant="ghost" className="w-full justify-start text-lg h-16 px-4">
+          <User className="mr-4 h-7 w-7" />
           Profile
         </Button>
       </Link>
       <Link href="/credits" prefetch={false}>
-        <Button variant="ghost" className="w-full justify-start">
-          <CreditCard className="mr-2 h-4 w-4" />
+        <Button variant="ghost" className="w-full justify-start text-lg h-16 px-4">
+          <CreditCard className="mr-4 h-7 w-7" />
           Credits
         </Button>
       </Link>
@@ -48,10 +48,10 @@ export function NewSidebar() {
   return (
     <>
       <button
-        className="fixed top-4 left-4 z-20 md:hidden"
+        className="fixed top-4 left-4 z-20 md:hidden p-3 bg-background/90 backdrop-blur-sm rounded-md shadow-md border border-muted"
         onClick={toggleSidebar}
       >
-        {isSidebarOpen ? null : <MenuIcon className="h-6 w-6" />}
+        {isSidebarOpen ? null : <MenuIcon className="h-9 w-9" />}
       </button>
       
       {/* UserButton in top right corner */}
@@ -62,22 +62,22 @@ export function NewSidebar() {
       </div>
 
       {/* Mobile sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col bg-background border-r border-muted transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
-        <div className="flex h-14 items-center justify-between px-4 border-b">
-          <Link href="/" className="flex items-center gap-2 font-semibold" prefetch={false}>
-            <Image src="/output.svg" alt="Nyme.AI Logo" width={20} height={20} />
-            <span>Nyme.AI</span>
+      <div className={`fixed inset-y-0 left-0 z-50 flex h-full w-80 flex-col bg-background border-r border-muted shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out md:hidden`}>
+        <div className="flex h-20 items-center justify-between px-5 border-b">
+          <Link href="/" className="flex items-center gap-3 font-semibold" prefetch={false}>
+            <Image src="/output.svg" alt="Nyme.AI Logo" width={32} height={32} />
+            <span className="text-xl">Nyme.AI</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme}>
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" className="h-12 w-12" onClick={toggleTheme}>
+              {isDarkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
             </Button>
-            <button onClick={toggleSidebar} className="p-2">
-              <XIcon className="h-6 w-6" />
+            <button onClick={toggleSidebar} className="p-3">
+              <XIcon className="h-9 w-9" />
             </button>
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-5">
           <NavItems />
         </div>
       </div>
