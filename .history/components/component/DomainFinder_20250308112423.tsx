@@ -41,7 +41,7 @@ interface Domain {
 }
 
 const TLDs = ['.com', '.io', '.ai', '.co', '.net'];
-const ADDITIONAL_TLDS = ['.org', '.dev', '.app', '.me', '.tech', '.xyz', '.site', '.online', '.store', '.bio', '.health'];
+const ADDITIONAL_TLDS = ['.org', '.dev', '.app', '.me', '.tech', '.xyz', '.site', '.online', '.store'];
 
 const getAffiliateLink = (domain: string) => {
   return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(domain)}&clickID=2eZ1DcRCpxyKUZtRio1i6XbcUkCXtpSh2w30Ro0&irgwc=1&utm_source=IR&utm_medium=Affiliate&utm_campaign=5673970&affnetwork=ir&ref=ir`;
@@ -93,7 +93,6 @@ export default function DomainFinder() {
   const [isMounted, setIsMounted] = useState(false)
   const [selectedTLDs, setSelectedTLDs] = useState<string[]>(TLDs)
   const [showAllTLDs, setShowAllTLDs] = useState(false)
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   // Handle mobile view after hydration is complete
   useEffect(() => {
@@ -137,13 +136,6 @@ export default function DomainFinder() {
       const errorMsg = 'Insufficient credits';
       setError(errorMsg);
       trackDomainSearchError('CREDITS_ERROR', errorMsg);
-      return;
-    }
-
-    if (selectedTLDs.length === 0) {
-      const errorMsg = 'Please select at least one TLD';
-      setError(errorMsg);
-      trackDomainSearchError('TLD_ERROR', errorMsg);
       return;
     }
 
@@ -326,27 +318,6 @@ export default function DomainFinder() {
     return isAvailable(status) ? "Available" : status;
   };
 
-  // Function to handle TLD selection without closing dropdown
-  const handleTLDChange = (tld: string, checked: boolean) => {
-    if (!checked) {
-      setSelectedTLDs(prev => [...prev, tld]);
-    } else {
-      setSelectedTLDs(prev => prev.filter(t => t !== tld));
-    }
-  };
-
-  // Function to handle "Show all TLD variations" toggle
-  const handleShowAllTLDs = (checked: boolean) => {
-    setShowAllTLDs(checked);
-    if (checked) {
-      // When enabling, add all additional TLDs but keep existing selections
-      const currentSelections = new Set(selectedTLDs);
-      const newTLDs = ADDITIONAL_TLDS.filter(tld => !currentSelections.has(tld));
-      setSelectedTLDs(prev => [...prev, ...newTLDs]);
-    }
-    // When disabling, we don't change the selected TLDs anymore
-  };
-
   return (
     <div className={`flex flex-col bg-gradient-to-b from-background to-muted/20 w-full ${isDarkMode ? 'dark' : ''}`}>
       <div className="flex-1">
@@ -391,16 +362,11 @@ export default function DomainFinder() {
                       />
                     </div>
                     <div className="flex gap-2">
-                      <DropdownMenu open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                      <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" className="flex-1 sm:flex-none">
                             <SlidersHorizontal className="mr-2 h-4 w-4" />
                             Filters
-                            {selectedTLDs.length > 0 && selectedTLDs.length < (TLDs.length + (showAllTLDs ? ADDITIONAL_TLDS.length : 0)) && (
-                              <Badge variant="secondary" className="ml-2 px-1 py-0 h-5">
-                                {selectedTLDs.length}
-                              </Badge>
-                            )}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
@@ -408,82 +374,49 @@ export default function DomainFinder() {
                           <DropdownMenuSeparator />
                           <DropdownMenuCheckboxItem 
                             checked={showAllTLDs}
-                            onSelect={(e) => e.preventDefault()}
-                            onCheckedChange={handleShowAllTLDs}
+                            onCheckedChange={(checked) => {
+                              setShowAllTLDs(checked);
+                              if (checked) {
+                                setSelectedTLDs([...TLDs, ...ADDITIONAL_TLDS]);
+                              } else {
+                                setSelectedTLDs([...TLDs]);
+                              }
+                            }}
                           >
                             Show all TLD variations
                           </DropdownMenuCheckboxItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuLabel>TLD Selection</DropdownMenuLabel>
-                          <div className="px-2 py-1 flex justify-between">
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="text-xs h-7"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setSelectedTLDs([...TLDs, ...(showAllTLDs ? ADDITIONAL_TLDS : [])]);
+                          {TLDs.map((tld) => (
+                            <DropdownMenuCheckboxItem 
+                              key={tld}
+                              checked={selectedTLDs.includes(tld)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedTLDs(prev => [...prev, tld]);
+                                } else {
+                                  setSelectedTLDs(prev => prev.filter(t => t !== tld));
+                                }
                               }}
                             >
-                              Select All
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="text-xs h-7"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setSelectedTLDs([]);
+                              {tld}
+                            </DropdownMenuCheckboxItem>
+                          ))}
+                          {showAllTLDs && ADDITIONAL_TLDS.map((tld) => (
+                            <DropdownMenuCheckboxItem 
+                              key={tld}
+                              checked={selectedTLDs.includes(tld)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedTLDs(prev => [...prev, tld]);
+                                } else {
+                                  setSelectedTLDs(prev => prev.filter(t => t !== tld));
+                                }
                               }}
                             >
-                              Clear All
-                            </Button>
-                          </div>
-                          <div className="grid grid-cols-3 gap-1 p-1">
-                            {TLDs.map((tld) => (
-                              <div 
-                                key={tld}
-                                className={`text-xs px-2 py-1 rounded cursor-pointer border ${
-                                  selectedTLDs.includes(tld) 
-                                    ? 'bg-primary text-primary-foreground border-primary' 
-                                    : 'bg-background border-muted-foreground/20 hover:bg-muted'
-                                }`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleTLDChange(tld, selectedTLDs.includes(tld));
-                                }}
-                              >
-                                {tld}
-                              </div>
-                            ))}
-                            {showAllTLDs && ADDITIONAL_TLDS.map((tld) => (
-                              <div 
-                                key={tld}
-                                className={`text-xs px-2 py-1 rounded cursor-pointer border ${
-                                  selectedTLDs.includes(tld) 
-                                    ? 'bg-primary text-primary-foreground border-primary' 
-                                    : 'bg-background border-muted-foreground/20 hover:bg-muted'
-                                }`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleTLDChange(tld, selectedTLDs.includes(tld));
-                                }}
-                              >
-                                {tld}
-                              </div>
-                            ))}
-                          </div>
-                          <DropdownMenuSeparator />
-                          <div className="px-2 py-1">
-                            <Button 
-                              variant="default" 
-                              size="sm" 
-                              className="w-full"
-                              onClick={() => setIsFilterOpen(false)}
-                            >
-                              Apply Filters
-                            </Button>
-                          </div>
+                              {tld}
+                            </DropdownMenuCheckboxItem>
+                          ))}
                           <DropdownMenuSeparator />
                           <DropdownMenuCheckboxItem checked>
                             Show price estimates
@@ -535,23 +468,6 @@ export default function DomainFinder() {
                       </Button>
                     </div>
                   </div>
-                  
-                  {/* TLD Selection Summary */}
-                  {selectedTLDs.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      <span className="text-xs text-muted-foreground">Searching: </span>
-                      {selectedTLDs.slice(0, 5).map((tld) => (
-                        <Badge key={tld} variant="outline" className="text-xs px-1 py-0 h-5">
-                          {tld}
-                        </Badge>
-                      ))}
-                      {selectedTLDs.length > 5 && (
-                        <Badge variant="outline" className="text-xs px-1 py-0 h-5">
-                          +{selectedTLDs.length - 5} more
-                        </Badge>
-                      )}
-                    </div>
-                  )}
                   
                   {/* Mode Selection */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">

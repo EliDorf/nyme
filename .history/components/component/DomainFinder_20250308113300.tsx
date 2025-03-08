@@ -339,12 +339,10 @@ export default function DomainFinder() {
   const handleShowAllTLDs = (checked: boolean) => {
     setShowAllTLDs(checked);
     if (checked) {
-      // When enabling, add all additional TLDs but keep existing selections
-      const currentSelections = new Set(selectedTLDs);
-      const newTLDs = ADDITIONAL_TLDS.filter(tld => !currentSelections.has(tld));
-      setSelectedTLDs(prev => [...prev, ...newTLDs]);
+      setSelectedTLDs([...TLDs, ...ADDITIONAL_TLDS]);
+    } else {
+      setSelectedTLDs([...TLDs]);
     }
-    // When disabling, we don't change the selected TLDs anymore
   };
 
   return (
@@ -439,40 +437,26 @@ export default function DomainFinder() {
                               Clear All
                             </Button>
                           </div>
-                          <div className="grid grid-cols-3 gap-1 p-1">
-                            {TLDs.map((tld) => (
-                              <div 
-                                key={tld}
-                                className={`text-xs px-2 py-1 rounded cursor-pointer border ${
-                                  selectedTLDs.includes(tld) 
-                                    ? 'bg-primary text-primary-foreground border-primary' 
-                                    : 'bg-background border-muted-foreground/20 hover:bg-muted'
-                                }`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleTLDChange(tld, selectedTLDs.includes(tld));
-                                }}
-                              >
-                                {tld}
-                              </div>
-                            ))}
-                            {showAllTLDs && ADDITIONAL_TLDS.map((tld) => (
-                              <div 
-                                key={tld}
-                                className={`text-xs px-2 py-1 rounded cursor-pointer border ${
-                                  selectedTLDs.includes(tld) 
-                                    ? 'bg-primary text-primary-foreground border-primary' 
-                                    : 'bg-background border-muted-foreground/20 hover:bg-muted'
-                                }`}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleTLDChange(tld, selectedTLDs.includes(tld));
-                                }}
-                              >
-                                {tld}
-                              </div>
-                            ))}
-                          </div>
+                          {TLDs.map((tld) => (
+                            <DropdownMenuCheckboxItem 
+                              key={tld}
+                              checked={selectedTLDs.includes(tld)}
+                              onSelect={(e) => e.preventDefault()}
+                              onCheckedChange={() => handleTLDChange(tld, selectedTLDs.includes(tld))}
+                            >
+                              {tld}
+                            </DropdownMenuCheckboxItem>
+                          ))}
+                          {showAllTLDs && ADDITIONAL_TLDS.map((tld) => (
+                            <DropdownMenuCheckboxItem 
+                              key={tld}
+                              checked={selectedTLDs.includes(tld)}
+                              onSelect={(e) => e.preventDefault()}
+                              onCheckedChange={() => handleTLDChange(tld, selectedTLDs.includes(tld))}
+                            >
+                              {tld}
+                            </DropdownMenuCheckboxItem>
+                          ))}
                           <DropdownMenuSeparator />
                           <div className="px-2 py-1">
                             <Button 
